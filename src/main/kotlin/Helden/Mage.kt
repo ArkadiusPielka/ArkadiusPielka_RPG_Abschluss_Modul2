@@ -5,12 +5,11 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
 
     override var startLevel = (5 until 10).random()
     override var maxHP: Int = hp * startLevel
-     override var currentHP = maxHP
-    var startHP = maxHP
-    var mana: Int = 0
-    var maxMana: Int = 100
+    override var currentHP = maxHP
+    override var maxResurse: Int = 10 * startLevel
+    override var resurse: Int = maxResurse
     var dmgNwe = 20 * startLevel
-    override var numberOfHits = 3
+    override var thisResurse = "Mana"
 
     val attacke = mutableMapOf<String, Int>(
         "Feuerball" to dmgNwe * 2,

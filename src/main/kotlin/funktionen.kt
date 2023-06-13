@@ -30,13 +30,13 @@ fun heldenErstellen() {
 
     println("--- Klasse Magier ---")
     println("Name: ${mage.name}\tLevel: ${mage.startLevel}")
-    println("HP: ${mage.startHP}/${mage.maxHP}\tMana: ${mage.mana}/${mage.maxMana}")
+    println("HP: ${mage.currentHP}/${mage.maxHP}\tMana: ${mage.resurse}/${mage.maxResurse}")
     println()
     Thread.sleep(SLEEP_TIME / 2)
 
     println("--- Klasse Mönch ---")
     println("Name: ${monk.name}\tLevel: ${monk.startLevel}")
-    println("HP: ${monk.startHP}/${monk.maxHP}\tKombo: ${monk.resurse}/${monk.maxResurse}")
+    println("HP: ${monk.currentHP}/${monk.maxHP}\tKombo: ${monk.resurse}/${monk.maxResurse}")
     Thread.sleep(SLEEP_TIME / 2)
 }
 

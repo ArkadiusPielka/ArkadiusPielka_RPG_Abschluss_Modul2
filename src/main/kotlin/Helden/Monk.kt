@@ -3,14 +3,14 @@ package Helden
 class Monk(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, dmg) {
 
 
-//    override var startLevel = (5 until 10).random()
+    //    override var startLevel = (5 until 10).random()
+    override var startLevel = (5 until 10).random()
     override var maxHP: Int = hp * startLevel
-     override var currentHP = maxHP
-    var startHP = maxHP
+    override var currentHP = maxHP
     override var resurse: Int = 0
     override var maxResurse: Int = 6
     var dmgNwe = 20 * startLevel
-    override var numberOfHits = 3
+    override var thisResurse = "kombo"
 
     val attacke = mutableMapOf<String, Int>(
         "Faustschlag" to dmgNwe * 2,

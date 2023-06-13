@@ -1,8 +1,8 @@
 package Helden
 
-import Gegner.Boss
 import Gegner.Opponent
 import SLEEP_TIME
+import chars
 
 
 // klasse für helden
@@ -13,20 +13,103 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
     open var maxResurse: Int = 100
     open val maxHP = level * hp
     open var currentHP = maxHP
-    open var numberOfHits = 0
+    open var thisResurse = ""
 
-    open fun attack(target: Boss, attack: Map<String, Int>, a: Int, b: Int, numberOfHits: Int) {
-//        val attack: MutableMap<String, Int> = mutableMapOf()
+
+    private fun spezialAttackWorrior(target: Opponent, attack: Map<String, Int>, a: Int, b: Int, numberOfHits: Int) {
+
+        var atkNamen = attack.keys
+        var attacke = atkNamen.elementAt(1)
+
+        if (a >= 40) {
+            for (i in 1..numberOfHits) {
+                val damage = attack[attacke]!!
+                target.hp -= damage
+            }
+            this.resurse -= 40
+            println("'${this.name}' greift '${target.name}' mit '$attacke' an")
+            println()
+        } else {
+            var attackeFehlschlag = atkNamen.elementAt(0)
+            println("Sie haben nicht genug von ihrer resurse")
+            println("Es wurde ${attackeFehlschlag} gewählt.")
+            println("'${this.name}' greift '${target.name}' mit '${attackeFehlschlag}' an")
+            target.hp -= attack[attackeFehlschlag]!!
+            this.resurse += 20
+            println()
+            println("--- ${target.name} erleidet ${attack[attackeFehlschlag]} schaden---")
+            Thread.sleep(SLEEP_TIME / 2)
+            println("Name: ${target.name}\t")
+            println("HP: ${target.hp}/${target.maxHP}")
+        }
+    }
+
+    fun spezialAttackMonk(target: Opponent, attack: Map<String, Int>, a: Int, b: Int, dmgOverTime: Int = 3) {
+
+        var atkNamen = attack.keys
+        var attacke = atkNamen.elementAt(1)
+        var i = dmgOverTime
+
+        if (a >= 2) {
+            for (i in 1..dmgOverTime) {
+                val damage = attack[attacke]!!
+                target.hp -= damage
+            }
+            this.resurse -= 2
+            println("'${this.name}' greift '${target.name}' mit '$attacke' an")
+            println()
+        } else {
+            var attackeFehlschlag = atkNamen.elementAt(0)
+            println("Sie haben nicht genug von ihrer resurse")
+            println("Es wurde ${attackeFehlschlag} gewählt.")
+            println("'${this.name}' greift '${target.name}' mit '${attackeFehlschlag}' an")
+            target.hp -= attack[attackeFehlschlag]!!
+            this.resurse += 20
+            println()
+            println("--- ${target.name} erleidet ${attack[attackeFehlschlag]} schaden---")
+            Thread.sleep(SLEEP_TIME / 2)
+            println("Name: ${target.name}\t")
+            println("HP: ${target.hp}/${target.maxHP}")
+        }
+    }
+
+    private fun spezialAttackMage(attack: Map<String, Int>, a: Int, b: Int) {
+
+        var atkNamen = attack.keys
+        var attacke = atkNamen.elementAt(1)
+
+        println("'${this.name}' Heilt alle mit '$attacke' an")
+        for (char in chars)
+            if (char.currentHP == char.maxHP) {
+                println("${char.name} muss nicht geheilt werden ${char.maxHP}/${char.maxHP}")
+            } else {
+                for (char in chars) {
+                    if (char is Warrior && char.currentHP > hp) {
+                        println("${char.name} wurde geheilt ${char.maxHP}/${char.maxHP}")
+                    } else if (char is Monk && char.currentHP > hp) {
+                        println("${char.name} wurde geheilt ${char.maxHP}/${char.maxHP}")
+                    } else if (char === this && char.currentHP > hp) {
+                        println("${char.name} wurde geheilt ${char.maxHP}/${char.maxHP}")
+                    } else {
+                        char.currentHP += attack[attacke]!!
+                        println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
+                    }
+                }
+            }
+    }
+    fun attack(target: Opponent, attack: Map<String, Int>, a: Int, b: Int, numberOfHits: Int) {
+
         this.resurse = a
         this.maxResurse = b
         this.hp = hp
         this.level = startLevel
-        this.numberOfHits =numberOfHits
+        this.thisResurse = thisResurse
+
         var atkNamen = attack.keys
         var atkDmg = attack.values
         println("--- Krieger ist an der Reihe ---")
         println("Name: ${this.name}\tLevel: ${this.level}")
-        println("HP: ${this.currentHP}/${this.maxHP}\tWut: ${this.resurse}/${this.maxResurse}")
+        println("HP: ${this.currentHP}/${this.maxHP}\t$thisResurse: ${this.resurse}/${this.maxResurse}")
 
         var eingabe: Int = 0
         do {
@@ -53,30 +136,33 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
                     }
 
                     2 -> {
-                        println("Sie haben $attacke gewählt, das ist eine Spezial Attacke die $numberOfHits zuschlägt.")
-                        if (a >= 40) {
-                            for (i in 1..numberOfHits) {
-                                val damage = attack[attacke]!!
-                                target.hp -= damage
-                            }
-                            this.resurse -= 40
-                            println("'${this.name}' greift '${target.name}' mit '$attacke' an")
-                            println()
-                        }
-                        else {
-                            var attackeFehlschlag = atkNamen.elementAt(0)
-                            println("Sie haben nicht genug von ihrer resurse")
-                            println("Es wurde ${attackeFehlschlag} gewählt.")
-                            println("'${this.name}' greift '${target.name}' mit '${attackeFehlschlag}' an")
-                            target.hp -= attack[attackeFehlschlag]!!
-                            this.resurse += 20
-                            println()
-                            println("--- ${target.name} erleidet ${attack[attackeFehlschlag]} schaden---")
-                            Thread.sleep(SLEEP_TIME / 2)
-                            println("Name: ${target.name}\t")
-                            println("HP: ${target.hp}/${target.maxHP}")
-                            break
-                        }
+                        this.spezialAttackWorrior(target, attack, a, b, numberOfHits)
+                        this.spezialAttackMage(attack, a, b)
+                        break
+//                        println("Sie haben $attacke gewählt, das ist eine Spezial Attacke die $numberOfHits zuschlägt.")
+//                        if (a >= 40) {
+//                            for (i in 1..numberOfHits) {
+//                                val damage = attack[attacke]!!
+//                                target.hp -= damage
+//                            }
+//                            this.resurse -= 40
+//                            println("'${this.name}' greift '${target.name}' mit '$attacke' an")
+//                            println()
+//                        }
+//                        else {
+//                            var attackeFehlschlag = atkNamen.elementAt(0)
+//                            println("Sie haben nicht genug von ihrer resurse")
+//                            println("Es wurde ${attackeFehlschlag} gewählt.")
+//                            println("'${this.name}' greift '${target.name}' mit '${attackeFehlschlag}' an")
+//                            target.hp -= attack[attackeFehlschlag]!!
+//                            this.resurse += 20
+//                            println()
+//                            println("--- ${target.name} erleidet ${attack[attackeFehlschlag]} schaden---")
+//                            Thread.sleep(SLEEP_TIME / 2)
+//                            println("Name: ${target.name}\t")
+//                            println("HP: ${target.hp}/${target.maxHP}")
+//                            break
+//                    }
                     }
 
                     3 -> {

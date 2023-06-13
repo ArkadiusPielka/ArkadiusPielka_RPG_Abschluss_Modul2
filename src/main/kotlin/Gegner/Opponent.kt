@@ -4,4 +4,6 @@ package Gegner
 open class Opponent(var name: String, var hp: Int) {
 
     val maxHP = hp
+
+
 }
