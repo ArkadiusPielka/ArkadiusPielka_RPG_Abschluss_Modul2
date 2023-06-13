@@ -36,7 +36,7 @@ fun heldenErstellen() {
 
     println("--- Klasse Mönch ---")
     println("Name: ${monk.name}\tLevel: ${monk.startLevel}")
-    println("HP: ${monk.startHP}/${monk.maxHP}\tKombo: ${monk.kombo}/${monk.maxKombo}")
+    println("HP: ${monk.startHP}/${monk.maxHP}\tKombo: ${monk.resurse}/${monk.maxResurse}")
     Thread.sleep(SLEEP_TIME / 2)
 }
 
