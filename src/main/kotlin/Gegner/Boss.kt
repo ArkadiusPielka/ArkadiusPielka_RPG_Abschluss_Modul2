@@ -1,6 +1,7 @@
 package Gegner
 
 import Helden.Hero
+import chars
 import mage
 import monk
 import warrior
@@ -16,7 +17,7 @@ class Boss(name: String, hp: Int): Opponent(name, hp) {
         "Feueratem" to 200,
         "Kralle" to 300
     )
-    private var chars = mutableListOf(warrior,mage, monk)
+
 
 fun bossAtk() {
     var atkNamen = bossAtk.keys.toList().random()
@@ -34,11 +35,11 @@ fun bossAtk() {
         println()
     } else {
         println("'${this.name}' greift '${hero.name}' mit '$atk' an")
-        hero.currentHP -= bossAtk[atk]!!
-        println("${hero.name} hat noch ${hero.currentHP}/${hero.maxHP}")
+        hero.hp -= bossAtk[atk]!!
+        println("${hero.name} hat noch ${hero.hp}/${hero.maxHP}")
         println()
     }
-    if (hero.currentHP <= 0){
+    if (hero.hp <= 0){
         chars.remove(hero)
     }
 

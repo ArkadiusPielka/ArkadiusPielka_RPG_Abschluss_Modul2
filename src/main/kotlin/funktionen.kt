@@ -12,17 +12,19 @@ var warrior = Warrior("",LEVEL, HP, STARTDMG)
 var mage = Mage("",LEVEL, HP, STARTDMG)
 var monk = Monk("",LEVEL, HP, STARTDMG)
 
+var chars = mutableListOf(warrior,mage, monk)
 //Der Boss wird erstellt
 var bossName = "Der Dunkle Ritter"
 var bossMaxHP = 10000
 var boss = Boss(bossName, bossMaxHP)
+
 
 // Helden werden in der Konsole ausgegeben
 fun heldenErstellen() {
 
     println("--- Klasse Krieger ---")
     println("Name: ${warrior.name}\tLevel: ${warrior.startLevel}")
-    println("HP: ${warrior.currentHP}/${warrior.maxHP}\tWut: ${warrior.rage}/${warrior.maxRage}")
+    println("HP: ${warrior.currentHP}/${warrior.maxHP}\tWut: ${warrior.resurse}/${warrior.maxResurse}")
     println()
     Thread.sleep(SLEEP_TIME / 2)
 
@@ -48,4 +50,6 @@ fun bossErstellen() {
     println("HP: ${boss.bossHP}/${boss.bossMaxHP}")
     println()
 }
+
+
 
