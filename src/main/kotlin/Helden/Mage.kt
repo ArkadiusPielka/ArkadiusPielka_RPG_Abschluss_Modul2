@@ -1,19 +1,26 @@
 package Helden
 
+import SLEEP_TIME
+import boss
+
+
 class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, dmg) {
 
 
     override var startLevel = (5 until 10).random()
     override var maxHP: Int = hp * startLevel
     override var currentHP = maxHP
-    override var maxResurse: Int = 10 * startLevel
+    override var maxResurse: Int = 20 * startLevel
     override var resurse: Int = maxResurse
     var dmgNwe = 20 * startLevel
     override var thisResurse = "Mana"
+    override var classPlayer = "Magier"
+    override var resuceRecovery = 20
+    override var specialAttackCost = 50
 
     val attacke = mutableMapOf<String, Int>(
         "Feuerball" to dmgNwe * 2,
-        "heilung" to maxHP / 2,
+        "heilung" to 300,
         "Meteor" to dmgNwe
     )
 
@@ -22,87 +29,68 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
         this.name = readln()
     }
 
+    override fun spezialAttacOnPlayer(
+        player: MutableList<Hero>,
+        attack: Map<String, Int>,
+        a: Int,
+        b: Int,
+        numberOfHits: Int
+    ) {
 
-//    fun mageAtk() {
-//        var atkNamen = mageAtk.keys
-//        println("--- Magier ist an der Reihe ---")
-//        println("Name: ${this.name}\tLevel: ${this.startLevel}")
-//        println("HP: ${this.currentHP}/${this.maxHP}\tWut: ${this.mana}/${this.maxMana}")
-//
-//        var eingabe: Int = 0
-//        do {
-//            println()
-//            println("Sie haben folgende Optionen")
-//            println("1 - ${atkNamen.elementAt(0)}")
-//            println("2 - ${atkNamen.elementAt(1)}")
-//            println("3 - ${atkNamen.elementAt(2)}")
-//            println("4 - Beutel")
-//
-//            try {
-//                eingabe = readln().toInt()
-//                var index = eingabe - 1
-//
-//                var attacke = atkNamen.elementAt(index)
-//                when (eingabe) {
-//
-//                    1 -> {
-//                        println("Sie haben $attacke gewählt.")
-//                        println("'${this.name}' greift '${boss.name}' mit '$attacke' an")
-//                        boss.bossHP -= mageAtk[attacke]!!
-//                        println()
-//                    }
-//
-//                    2 -> {
-//                            println("'${this.name}' Heilt alle mit '$attacke' an")
-//                        if (warrior.currentHP > hp) {
-//                            println("${warrior.name} wurde geheilt ${warrior.maxHP}/${warrior.maxHP}")
-//                        }
-//                        if (this.currentHP > hp){
-//                            println("${this.name} wurde geheilt ${this.maxHP}/${this.maxHP}")
-//                        }
-//                        if (monk.currentHP > hp) {
-//                            println("${monk.name} wurde geheilt ${monk.maxHP}/${monk.maxHP}")
-//                        }
-//                        else {
-//                            warrior.currentHP += mageAtk[attacke]!!
-//                            monk.currentHP += mageAtk[attacke]!!
-//                            this.currentHP += mageAtk[attacke]!!
-//                            println("${warrior.name} wurde geheilt ${warrior.currentHP}/${warrior.maxHP}")
-//                            println("${monk.name} wurde geheilt ${monk.currentHP}/${monk.maxHP}")
-//                            println("${this.name} wurde geheilt ${this.currentHP}/${this.maxHP}")
-//                            println()
-//                        }
-//                    }
-//
-//                    3 -> {
-//                        println("Sie haben $attacke gewählt.")
-//                        println("'${this.name}' greift '${boss.name}' mit '$attacke' an")
-//                        boss.bossHP -= mageAtk[attacke]!!
-//                        println()
-//                    }
-//
-//                    4 -> {
-////                TODO Beutel einfügen
-//                    }
-//
-//                    else -> {
-//                        println("Falsche Eingabe")
-//                    }
-//
-//                }
-//
-//                println("--- ${boss.name} erleidet ${mageAtk[attacke]} schaden---")
-//                Thread.sleep(SLEEP_TIME / 2)
-//                println("Name: ${boss.name}\t")
-//                println("HP: ${boss.bossHP}/${boss.bossMaxHP}")
-//
-//            } catch (e: Exception) {
-//                println("Falsche Eingabe")
-//            }
-//
-//        } while (eingabe != 1 && eingabe != 2 && eingabe != 3 && eingabe != 4)
-//    }
+        var atkNamen = attack.keys
+        var attacke = atkNamen.elementAt(1)
+
+        println("'${this.name}' Heilt alle mit '$attacke':")
+        if (a >= specialAttackCost) {
+            var healNeeded = false
+            for (char in player)
+                if (char.currentHP < char.maxHP) {
+                    var healing = attack[attacke]!!
+                    var life = char.currentHP
+                    var newHP = healing + life
+                    if (newHP > char.maxHP) {
+                        println("${char.name} wurde geheilt ${char.maxHP}/${char.maxHP}")
+                    } else {
+                        char.currentHP = newHP
+                        println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
+                        healNeeded = true
+                    }
+
+                    }
+                    if (!healNeeded) {
+                        println("Es braucht keiner eine Heilung")
+                }
+            this.resurse -= specialAttackCost
+            println()
+
+        } else {
+            var attackeFehlschlag = atkNamen.elementAt(0)
+            println("Sie haben nicht genug von ihrer resurse")
+            println("Es wurde $attackeFehlschlag gewählt.")
+            val target = boss
+            println("'${this.name}' greift '${target.name}' mit '${attackeFehlschlag}' an")
+            target.hp -= attack[attackeFehlschlag]!!
+            this.resurse += this.resuceRecovery
+            println()
+            println("--- ${target.name} erleidet ${attack[attackeFehlschlag]} schaden---")
+            Thread.sleep(SLEEP_TIME / 2)
+            println("Name: ${target.name}\t")
+            println("HP: ${target.hp}/${target.maxHP}")
+        }
+        Thread.sleep(SLEEP_TIME)
+    }
+
 }
 
+//for (char in player) {
+//                        if (char is Warrior && char.currentHP > hp) {
+//                            println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
+//                        } else if (char is Monk && char.currentHP > hp) {
+//                            println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
+//                        } else if (char === this && char.currentHP > hp) {
+//                            println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
+//                        } else {
+//                            char.currentHP += attack[attacke]!!
+//                            println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
 
 

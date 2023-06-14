@@ -1,6 +1,6 @@
 package Helden
 
-import Gegner.Boss
+import Gegner.Opponent
 import SLEEP_TIME
 
 class Warrior(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, dmg) {
@@ -13,6 +13,9 @@ class Warrior(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, leve
     var dmgNwe = 20 * startLevel
     var numberOfHits = 3
     override var thisResurse = "Wut"
+    override var classPlayer = "Krieger"
+    override var resuceRecovery = 20
+    override var specialAttackCost = 40
 
     val attacke = mutableMapOf<String, Int>(
         "Hieb" to dmgNwe * 2,
@@ -24,7 +27,38 @@ class Warrior(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, leve
         println("Bitte geben sie den Namen für Ihren Krieger ein")
         this.name = readln()
     }
+    override fun spezialAttack(target: Opponent, attack: Map<String, Int>, a: Int, b: Int, numberOfHits: Int) {
 
+        var atkNamen = attack.keys
+        var attacke = atkNamen.elementAt(1)
+
+        if (a >= specialAttackCost) {
+            for (i in 1..numberOfHits) {
+                val damage = attack[attacke]!!
+                target.hp -= damage
+            }
+            this.resurse -= specialAttackCost
+            println("'${this.name}' greift '${target.name}' mit '$attacke' an")
+            println("--- ${target.name} erleidet ${attack[attacke]?.times(numberOfHits)} schaden---")
+            Thread.sleep(SLEEP_TIME / 2)
+            println("Name: ${target.name}\t")
+            println("HP: ${target.hp}/${target.maxHP}")
+            println()
+        } else {
+            var attackeFehlschlag = atkNamen.elementAt(0)
+            println("Sie haben nicht genug von ihrer resurse")
+            println("Es wurde ${attackeFehlschlag} gewählt.")
+            println("'${this.name}' greift '${target.name}' mit '${attackeFehlschlag}' an")
+            target.hp -= attack[attackeFehlschlag]!!
+            this.resurse += this.resuceRecovery
+            println()
+            println("--- ${target.name} erleidet ${attack[attackeFehlschlag]} schaden---")
+            Thread.sleep(SLEEP_TIME / 2)
+            println("Name: ${target.name}\t")
+            println("HP: ${target.hp}/${target.maxHP}")
+
+        }
+    }
 //    override fun attack(target: Boss, attack: Map<String, Int>, a: Int, b: Int, numberOfHits: Int) {
 ////        val attack: MutableMap<String, Int> = mutableMapOf()
 //        this.resurse = a

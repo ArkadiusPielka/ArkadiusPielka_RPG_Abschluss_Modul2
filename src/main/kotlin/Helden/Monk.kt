@@ -1,5 +1,8 @@
 package Helden
 
+import Gegner.Opponent
+import SLEEP_TIME
+
 class Monk(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, dmg) {
 
 
@@ -7,10 +10,13 @@ class Monk(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
     override var startLevel = (5 until 10).random()
     override var maxHP: Int = hp * startLevel
     override var currentHP = maxHP
-    override var resurse: Int = 0
+    override var resurse: Int = 6
     override var maxResurse: Int = 6
     var dmgNwe = 20 * startLevel
     override var thisResurse = "kombo"
+    override var classPlayer = "Mönch"
+    override var resuceRecovery = 2
+    override var specialAttackCost = 4
 
     val attacke = mutableMapOf<String, Int>(
         "Faustschlag" to dmgNwe * 2,
@@ -23,71 +29,42 @@ class Monk(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
         this.name = readln()
     }
 
+    override fun spezialAttack(target: Opponent, attack: Map<String, Int>, a: Int, b: Int, numberOfHits: Int) {
 
-//    fun monkAtk() {
-//        var atkNamen = monkAtk.keys
-//        println("--- Mönch ist an der Reihe ---")
-//        println("Name: ${this.name}\tLevel: ${this.startLevel}")
-//        println("HP: ${this.currentHP}/${this.maxHP}\tWut: ${this.kombo}/${this.maxKombo}")
-//
-//        var eingabe: Int = 0
-//        do {
-//            println()
-//            println("Sie haben folgende Optionen")
-//            println("1 - ${atkNamen.elementAt(0)}")
-//            println("2 - ${atkNamen.elementAt(1)}")
-//            println("3 - ${atkNamen.elementAt(2)}")
-//            println("4 - Beutel")
-//
-//            try {
-//                eingabe = readln().toInt()
-//                var index = eingabe - 1
-//
-//                var attacke = atkNamen.elementAt(index)
-//                when (eingabe) {
-//
-//                    1 -> {
-//                        println("Sie haben $attacke gewählt.")
-//                        println("'${this.name}' greift '${boss.name}' mit '$attacke' an")
-//                        boss.bossHP -= monkAtk[attacke]!!
-//                        println()
-//                    }
-//
-//                    2 -> {
-//                        println("Sie haben $attacke gewählt.")
-//                        println("'${this.name}' greift '${boss.name}' mit '$attacke' an")
-//                        boss.bossHP -= monkAtk[attacke]!!
-//                        println()
-//                    }
-//
-//                    3 -> {
-//                        println("Sie haben $attacke gewählt.")
-//                        println("'${this.name}' greift '${boss.name}' mit '$attacke' an")
-//                        boss.bossHP -= monkAtk[attacke]!!
-//                        println()
-//                    }
-//
-//                    4 -> {
-////                TODO Beutel einfügen
-//                    }
-//
-//                    else -> {
-//                        println("Falsche Eingabe")
-//                    }
-//
-//                }
-//
-//                println("--- ${boss.name} erleide ${monkAtk[attacke]} schaden---")
-//                Thread.sleep(SLEEP_TIME / 2)
-//                println("Name: ${boss.name}\t")
-//                println("HP: ${boss.bossHP}/${boss.bossMaxHP}")
-//
-//            } catch (e: Exception) {
-//                println("Falsche Eingabe")
-//            }
-//
-//        } while (eingabe != 1 && eingabe != 2 && eingabe != 3 && eingabe != 4)
-//    }
+        var atkNamen = attack.keys
+        var attacke = atkNamen.elementAt(1)
+        var duratin = numberOfHits
+
+        if (a >= specialAttackCost) {
+            println("'${this.name}' greift '${target.name}' mit '$attacke' an die 3 runden lang ${attack[attacke]} schaden verursacht.")
+            println("Name: ${target.name}\t")
+            println("HP: ${target.hp}/${target.maxHP}")
+            var i = duratin
+            var round = 1
+            while (i > 0) {
+                println("Runde $round, '${target.name}' bekommt ${attack[attacke]} Schaden.")
+                target.hp -= attack[attacke]!!
+                println()
+                println("Name: ${target.name}\t")
+                println("HP: ${target.hp}/${target.maxHP}")
+                i--
+                round++
+                Thread.sleep(SLEEP_TIME / 2)
+            }
+        } else {
+            var attackeFehlschlag = atkNamen.elementAt(0)
+            println("Sie haben nicht genug von ihrer resurse")
+            println("Es wurde ${attackeFehlschlag} gewählt.")
+            println("'${this.name}' greift '${target.name}' mit '${attackeFehlschlag}' an")
+            target.hp -= attack[attackeFehlschlag]!!
+            this.resurse += this.resuceRecovery
+            println("--- ${target.name} erleidet ${attack[attackeFehlschlag]} schaden---")
+            Thread.sleep(SLEEP_TIME / 2)
+            println("Name: ${target.name}\t")
+            println("HP: ${target.hp}/${target.maxHP}")
+        }
+    }
+
 }
 
 

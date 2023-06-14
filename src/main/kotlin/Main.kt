@@ -1,7 +1,7 @@
 const val SLEEP_TIME: Long = 2000
 
-//fun main() {
-//
+fun main() {
+
 //   heldenErstellen()
 //   println()
 //   Thread.sleep(SLEEP_TIME)
@@ -12,21 +12,21 @@ const val SLEEP_TIME: Long = 2000
 //   do {
 //      println("Runde ${i + 1}")
 //      if (warrior.currentHP > 0) {
-//         warrior.warriorAtk()
+//         warrior.attacke
 //      }
 //      else {
 //         println("${warrior.name} ist tot.")
 //      }
 //
 //      if (mage.currentHP > 0) {
-//         mage.mageAtk()
+//         mage.attacke
 //
 //      }
 //      else {
 //         println("${mage.name} ist tot.")
 //      }
 //      if (monk.currentHP > 0) {
-//         monk.monkAtk()
+//         monk.attacke
 //      }
 //      else {
 //         println("${monk.name} ist tot.")
@@ -36,7 +36,7 @@ const val SLEEP_TIME: Long = 2000
 //
 //      i++
 //   } while (boss.bossHP >=0 || (warrior.currentHP >= 0 || mage.currentHP >= 0 || monk.currentHP >= 0))
-//
-//}
+
+}
 
 
