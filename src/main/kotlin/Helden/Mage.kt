@@ -1,7 +1,9 @@
 package Helden
 
+import Gegner.Opponent
 import SLEEP_TIME
 import boss
+import chars
 
 
 class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, dmg) {
@@ -18,7 +20,7 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
     override var resuceRecovery = 20
     override var specialAttackCost = 50
 
-    val attacke = mutableMapOf<String, Int>(
+    override var attacke = mutableMapOf<String, Int>(
         "Feuerball" to dmgNwe * 2,
         "heilung" to 300,
         "Meteor" to dmgNwe
@@ -29,22 +31,39 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
         this.name = readln()
     }
 
-    override fun spezialAttacOnPlayer(
-        player: MutableList<Hero>,
-        attack: Map<String, Int>,
-        a: Int,
-        b: Int,
-        numberOfHits: Int
-    ) {
+    override fun standartAttack(target: Opponent, attack: Map<String, Int>, a: Int, b: Int) {
+        var atkNamen = attack.keys
+        var attacke = atkNamen.elementAt(0)
+        println("Sie haben $attacke gewählt.")
+        println("'${this.name}' greift '${target.name}' mit '$attacke' an")
+        target.hp -= attack[attacke]!!
+        val resurceNew = this.resurse + this.resuceRecovery
+        if (resurceNew > this.maxResurse) {
+            this.resurse = this.maxResurse
+        } else {
+            this.resurse += this.resuceRecovery
+        }
+            println()
+        println("--- ${target.name} erleidet ${attack[attacke]} schaden---")
+        println("Name: ${target.name}\t")
+        println("HP: ${target.hp}/${target.maxHP}")
+        Thread.sleep(SLEEP_TIME)
+        println()
+    }
+    override fun spezialAttacOnPlayer(player: MutableList<Hero>, attack: Map<String, Int>, a: Int, b: Int) {
+
+// TODO heilung noch anpassen
 
         var atkNamen = attack.keys
         var attacke = atkNamen.elementAt(1)
 
         println("'${this.name}' Heilt alle mit '$attacke':")
         if (a >= specialAttackCost) {
-            var healNeeded = false
-            for (char in player)
-                if (char.currentHP < char.maxHP) {
+//            var healNeeded = false
+            for (char in chars)
+                if (char.currentHP < 0) {
+                    println("${char.name} ist besiegt und kann nicht geheilt werden ${char.maxHP}/${char.maxHP}")
+                } else if (char.currentHP < char.maxHP) {
                     var healing = attack[attacke]!!
                     var life = char.currentHP
                     var newHP = healing + life
@@ -53,13 +72,13 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
                     } else {
                         char.currentHP = newHP
                         println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
-                        healNeeded = true
+//                        healNeeded = true
                     }
 
-                    }
-                    if (!healNeeded) {
-                        println("Es braucht keiner eine Heilung")
                 }
+//            if (!healNeeded) {
+//                println("Es braucht keiner eine Heilung")
+//            }
             this.resurse -= specialAttackCost
             println()
 
@@ -79,18 +98,6 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
         }
         Thread.sleep(SLEEP_TIME)
     }
-
 }
-
-//for (char in player) {
-//                        if (char is Warrior && char.currentHP > hp) {
-//                            println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
-//                        } else if (char is Monk && char.currentHP > hp) {
-//                            println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
-//                        } else if (char === this && char.currentHP > hp) {
-//                            println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
-//                        } else {
-//                            char.currentHP += attack[attacke]!!
-//                            println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
 
 

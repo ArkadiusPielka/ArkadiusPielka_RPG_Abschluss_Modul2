@@ -1,18 +1,24 @@
 package Gegner
 
+import Helden.Hero
 
 
-class BossHelper(name: String, hp: Int): Opponent(name, hp) {
+class BossHelper(name: String, hp: Int, maxHP: Int): Opponent(name, hp, maxHP) {
 
 
-    var bossHelperHP = 50000
-    var bossHelperMaxHP = 50000
 
-
-    var bossHelperAtk = mutableMapOf<String, Int>(
-        "Feueratem" to 200,
-        "Kralle" to 300
+    var attack = mutableMapOf<String, Int>(
+        "Schwert-Angriff" to 200,
+        "Stacheln" to 100
     )
 
+    override fun aoeDamage(target: MutableList<Hero>, attack: Map<String, Int>) {
+        var atkNamen = "Stacheln"
+        println("'${this.name}' greift alle mit '$atkNamen' an")
+        for (char in target) {
+            char.currentHP -= attack[atkNamen]!!
 
+            println("${char.name} hat noch ${char.currentHP}/${char.maxHP}")
+        }
+    }
 }
