@@ -4,61 +4,68 @@ import Gegner.Opponent
 import Helden.Hero
 import Helden.Mage
 import Helden.Monk
+
 import Helden.Warrior
+import Inventory.Healpotion
+import Inventory.Item
 
 // Helden werden Generiert
 var LEVEL = 5
 var HP = 100
 var STARTDMG = 50
 
-var warrior = Warrior("", LEVEL, HP, STARTDMG)
-var mage = Mage("", LEVEL, HP, STARTDMG)
-var monk = Monk("", LEVEL, HP, STARTDMG)
+var warrior = Warrior("Akki", LEVEL, HP, STARTDMG)
+var mage = Mage("Nico", LEVEL, HP, STARTDMG)
+var monk = Monk("Luca", LEVEL, HP, STARTDMG)
 
 var chars: MutableList<Hero> = mutableListOf(warrior, mage, monk)
+var deadChars: MutableList<Hero> = mutableListOf()
 
 //Der Boss wird erstellt
 
-var boss = Boss("Der Schwarze Ritter", 10000,10000)
+var boss = Boss("Der Schwarze Ritter", 10000, 10000)
 
 //Der boss beschwört einen helfer
 
-var bossHelper = BossHelper("Skelett-Krieger", 3000,3000)
+var bossHelper = BossHelper("Skelett-Krieger", 800, 3000)
 
 var enemys: MutableList<Opponent> = mutableListOf(boss)
 
+var bag: MutableList<Item> = mutableListOf(
+    Healpotion("Heiltrank", 3),
+)
 
-// Helden werden in der Konsole ausgegeben
-fun heldenErstellen() {
-
-    println("--- Klasse Krieger ---")
-    println("Name: ${warrior.name}\tLevel: ${warrior.startLevel}")
-    println("HP: ${warrior.currentHP}/${warrior.maxHP}\tWut: ${warrior.resurse}/${warrior.maxResurse}")
-    println()
-    Thread.sleep(SLEEP_TIME / 2)
-
-    println("--- Klasse Magier ---")
-    println("Name: ${mage.name}\tLevel: ${mage.startLevel}")
-    println("HP: ${mage.currentHP}/${mage.maxHP}\tMana: ${mage.resurse}/${mage.maxResurse}")
-    println()
-    Thread.sleep(SLEEP_TIME / 2)
-
-    println("--- Klasse Mönch ---")
-    println("Name: ${monk.name}\tLevel: ${monk.startLevel}")
-    println("HP: ${monk.currentHP}/${monk.maxHP}\tKombo: ${monk.resurse}/${monk.maxResurse}")
-    Thread.sleep(SLEEP_TIME / 2)
-}
 
 //Boss wird in der konsole ausgegeben
 fun bossErstellen() {
 
-    println("Der Boss wird erstellt:")
+
+    println()
     Thread.sleep(SLEEP_TIME / 2)
     println("--- ${boss.name} ---")
     println("Name: ${boss.name}\t")
     println("HP: ${boss.hp}/${boss.maxHP}")
     println()
 }
+
+fun oneEnemy() {
+
+
+    if (enemys.size == 2) {
+//        Thread.sleep(SLEEP_TIME / 2)
+        println("--- Der Boss ---\t\t\t\t --- Der Helfer ---")
+        println("--- ${boss.name} ---\t\t --- ${bossHelper.name} ---")
+        println("HP: ${boss.hp}/${boss.maxHP}\t\t\t\t\t HP: ${bossHelper.hp}/${bossHelper.maxHP}")
+        println()
+
+    } else {
+//        Thread.sleep(SLEEP_TIME / 2)
+        println("--- ${boss.name} ---")
+        println("HP: ${boss.hp}/${boss.maxHP}")
+        println()
+    }
+}
+
 
 fun bossHelper() {
 
@@ -69,67 +76,86 @@ fun bossHelper() {
     println()
 }
 
+fun theFight() {
+    println(chars)
+    println(deadChars)
+    if (enemys.size == 1) {
 
-fun theFightNew() {
-    println("Der Kampf beginnt!!")
-    println()
-    var i = 0
-    do {
-        println("---- Runde ${i + 1} ---")
-        println()
+        for (hero in chars) {
+            oneEnemy()
+            heldenErstellenNeu()
+            if (hero.currentHP > 0) {
+                hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
+            }
+        }
+        if (boss.hp > 0) {
+            boss.attack(chars, boss.attack)
+        }
+    } else {
+        var bossHelperAlive = true
+        for (hero in chars) {
+            if (enemys.isEmpty()) {
+                break
+            }
+            println()
+            oneEnemy()
+            heldenErstellenNeu()
+            if (bossHelperAlive) {
+                println("Wen wollen Sie angreifen? ${hero.name} ")
+                println("1 - ${boss.name}: ${boss.hp}/${boss.maxHP}")
+                println("2 - ${bossHelper.name}: ${bossHelper.hp}/${bossHelper.maxHP}")
+                var input: Int? = null
 
-        if (enemys.size == 1) {
+//                Schleife zur richtigen Eingabe
 
-                for (hero in chars) {
+                while (input !in listOf(1, 2)) {
+                    try {
+                        input = readlnOrNull()?.toInt()
 
-                    if (hero.currentHP > 0) {
-                        hero.attack(boss, hero.attacke, hero.resurse, hero.maxResurse)
-                        if (boss.hp < 0) {
-                            println("Der ${boss.name} wurde besiegt ... Sie haben Gewonnen ")
-                            enemys.remove(boss)
-                        }
+                    } catch (e: NumberFormatException) {
+                        println("Ungültige Eingabe. Bitte geben Sie 1 oder 2 ein.")
                     }
                 }
-                    boss.attack(chars, boss.attack)
-        }
-        else if (enemys.size == 2) {
+                if (input == 1) {
+                    hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
 
-                for (hero in chars) {
-                    println("Wen wollen Sie angreifen?")
-                    println("1 - ${boss.name}: ${boss.hp}/${boss.maxHP}")
-                    println("2 - ${bossHelper.name}: ${bossHelper.hp}/${bossHelper.maxHP}")
-                    val input = readln().toInt()
-                    println()
-                    if (hero.currentHP > 0 && input == 1) {
-                        hero.attack(boss, hero.attacke, hero.resurse, hero.maxResurse)
-                        if (boss.hp < 0) {
-                            println("Der ${boss.name} wurde besiegt ... ")
-                            enemys.remove(boss)
-                        }
-                    }
-                    if (hero.currentHP > 0 && input == 2) {
-                        hero.attack(bossHelper, hero.attacke, hero.resurse, hero.maxResurse)
-                        if (bossHelper.hp < 0) {
-                            println("Der ${bossHelper.name} wurde besiegt ... ")
-                            enemys.remove(bossHelper)
-                        }
+                } else {
+                    hero.attack(bossHelper, hero.attacke, hero.resurce, hero.maxResource)
+                    if (bossHelper.hp <= 0) {
+                        bossHelperAlive = false
                     }
                 }
-                boss.attack(chars, boss.attack)
-                bossHelper.attack(chars,bossHelper.attack)
+            } else {
+                if (enemys.isEmpty()) {
+                    break
+                } else {
+                    hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
+                }
+            }
         }
-        i++
-    } while (boss.hp > 0 || (warrior.currentHP > 0 || mage.currentHP > 0 || monk.currentHP > 0))
+        if (enemys.isEmpty()) {
+
+        } else {
+            for (enemy in enemys) {
+                if (chars.isEmpty()){
+                    break
+                } else {
+                    enemy.attack(chars, enemy.attack)
+                }
+            }
+        }
+    }
 }
+
 
 fun heldenErstellenNeu() {
 // .padEnd(8, '4')
     println("--- Klasse Krieger ---\t\t\t" + "--- Klasse Magier ---\t\t\t" + "--- Klasse Mönch ---")
     println("Name: ${warrior.name}\tLevel: ${warrior.startLevel}\t\t\t" + "Name: ${mage.name}\tLevel: ${mage.startLevel}\t\t\t" + "Name: ${monk.name}\tLevel: ${monk.startLevel}")
-    println("HP: ${warrior.currentHP}/${warrior.maxHP}\tWut: ${warrior.resurse}/${warrior.maxResurse}\t\t\t" + "HP: ${mage.currentHP}/${mage.maxHP}\t Mana: ${mage.resurse}/${mage.maxResurse}\t\t" + "HP: ${monk.currentHP}/${monk.maxHP}\t Kombo: ${monk.resurse}/${monk.maxResurse}")
+    println("HP: ${warrior.currentHP}/${warrior.maxHP}\tWut: ${warrior.resurce}/${warrior.maxResource}\t\t\t" + "HP: ${mage.currentHP}/${mage.maxHP}\t Mana: ${mage.resurce}/${mage.maxResource}\t\t" + "HP: ${monk.currentHP}/${monk.maxHP}\t Chakra: ${monk.resurce}/${monk.maxResource}")
     println()
-    Thread.sleep(SLEEP_TIME / 2)
-    println()
+//    Thread.sleep(SLEEP_TIME / 2)
 
 }
+
 
