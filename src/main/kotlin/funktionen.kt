@@ -32,15 +32,14 @@ var bossHelper = BossHelper("Skelett-Krieger", 800, 3000)
 
 var enemys: MutableList<Opponent> = mutableListOf(boss)
 
-var bag: MutableList<Item> = mutableListOf(
-    Healpotion("Heiltrank", 3),
-    Scroll("Wiederbelebungs-Rolle",1)
-)
+var scroll = Scroll("Rolle der Wiederbelebung", 1)
+var potion = Healpotion("Heiltrank", 3)
+
+var bag: MutableList<Item> = mutableListOf(potion,scroll)
 
 
 //Boss wird in der konsole ausgegeben
-fun bossErstellen() {
-
+fun createBoss() {
 
     println()
     Thread.sleep(SLEEP_TIME / 2)
@@ -50,26 +49,22 @@ fun bossErstellen() {
     println()
 }
 
-fun oneEnemy() {
-
+fun enemyInFight() {
 
     if (enemys.size == 2) {
-//        Thread.sleep(SLEEP_TIME / 2)
         println("--- Der Boss ---\t\t\t\t --- Der Helfer ---")
         println("--- ${boss.name} ---\t\t --- ${bossHelper.name} ---")
         println("HP: ${boss.hp}/${boss.maxHP}\t\t\t\t\t HP: ${bossHelper.hp}/${bossHelper.maxHP}")
         println()
 
     } else {
-//        Thread.sleep(SLEEP_TIME / 2)
         println("--- ${boss.name} ---")
         println("HP: ${boss.hp}/${boss.maxHP}")
         println()
     }
 }
 
-
-fun bossHelper() {
+fun createBossHelper() {
 
     Thread.sleep(SLEEP_TIME / 2)
     println("--- ${bossHelper.name} ---")
@@ -78,14 +73,22 @@ fun bossHelper() {
     println()
 }
 
+fun createHeroes() {
+
+    println("--- Klasse Krieger ---\t\t\t\t" + "--- Klasse Magier ---\t\t\t\t" + "--- Klasse Mönch ---")
+    println("Name: ${warrior.name}\tLevel: ${warrior.startLevel}\t\t\t\t" + "Name: ${mage.name}\tLevel: ${mage.startLevel}\t\t\t\t" + "Name: ${monk.name}\tLevel: ${monk.startLevel}")
+    println("HP: ${warrior.currentHP}/${warrior.maxHP}\tWut: ${warrior.resurce}/${warrior.maxResource}\t\t\t\t" + "HP: ${mage.currentHP}/${mage.maxHP}\t Mana: ${mage.resurce}/${mage.maxResource}\t\t\t" + "HP: ${monk.currentHP}/${monk.maxHP}\t Chakra: ${monk.resurce}/${monk.maxResource}")
+    println()
+
+}
+
 fun theFight() {
-    println(chars)
-    println(deadChars)
+
     if (enemys.size == 1) {
 
         for (hero in chars) {
-            oneEnemy()
-            heldenErstellenNeu()
+            enemyInFight()
+            createHeroes()
             if (hero.currentHP > 0) {
                 hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
             }
@@ -95,27 +98,34 @@ fun theFight() {
         }
     } else {
         var bossHelperAlive = true
+
         for (hero in chars) {
             if (enemys.isEmpty()) {
                 break
             }
             println()
-            oneEnemy()
-            heldenErstellenNeu()
+            enemyInFight()
+            createHeroes()
             if (bossHelperAlive) {
                 println("Wen wollen Sie angreifen? ${hero.name} ")
-                println("1 - ${boss.name}: ${boss.hp}/${boss.maxHP}")
-                println("2 - ${bossHelper.name}: ${bossHelper.hp}/${bossHelper.maxHP}")
+                for (i in enemys) {
+                    println("${enemys.indexOf(i) + 1} - ${i.name} - HP: ${i.hp}/${i.maxHP}")
+                }
                 var input: Int? = null
 
 //                Schleife zur richtigen Eingabe
 
-                while (input !in listOf(1, 2)) {
+                while (input !in (1..enemys.size)) {
                     try {
                         input = readlnOrNull()?.toInt()
-
+                        if (input != null) {
+                            if (input > enemys.size) {
+                                println("Ungültige Eingabe. Bitte geben Sie 1 oder ${enemys.size} ein.")
+                            }
+                        }
                     } catch (e: NumberFormatException) {
-                        println("Ungültige Eingabe. Bitte geben Sie 1 oder 2 ein.")
+//                        wenn ein String eingegeben wird
+                        println("Ungültige Eingabe. Bitte geben Sie 1 oder ${enemys.size} ein.")
                     }
                 }
                 if (input == 1) {
@@ -139,7 +149,7 @@ fun theFight() {
 
         } else {
             for (enemy in enemys) {
-                if (chars.isEmpty()){
+                if (chars.isEmpty()) {
                     break
                 } else {
                     enemy.attack(chars, enemy.attack)
@@ -150,13 +160,5 @@ fun theFight() {
 }
 
 
-fun heldenErstellenNeu() {
-
-    println("--- Klasse Krieger ---\t\t\t\t" + "--- Klasse Magier ---\t\t\t\t" + "--- Klasse Mönch ---")
-    println("Name: ${warrior.name}\tLevel: ${warrior.startLevel}\t\t\t\t" + "Name: ${mage.name}\tLevel: ${mage.startLevel}\t\t\t\t" + "Name: ${monk.name}\tLevel: ${monk.startLevel}")
-    println("HP: ${warrior.currentHP}/${warrior.maxHP}\tWut: ${warrior.resurce}/${warrior.maxResource}\t\t\t\t" + "HP: ${mage.currentHP}/${mage.maxHP}\t Mana: ${mage.resurce}/${mage.maxResource}\t\t\t" + "HP: ${monk.currentHP}/${monk.maxHP}\t Chakra: ${monk.resurce}/${monk.maxResource}")
-    println()
-
-}
 
 

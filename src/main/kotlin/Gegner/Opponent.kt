@@ -1,10 +1,6 @@
 package Gegner
 
 import Helden.Hero
-import SLEEP_TIME
-import boss
-import bossHelper
-import chars
 
 
 // klasse für gegner

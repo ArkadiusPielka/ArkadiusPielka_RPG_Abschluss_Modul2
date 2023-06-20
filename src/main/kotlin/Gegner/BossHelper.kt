@@ -30,7 +30,8 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
         }
         deadChars.addAll(deadInFight)
         chars.removeAll(deadInFight)
-
+        println()
+        Thread.sleep(SLEEP_TIME)
     }
 
     override fun attack(target: MutableList<Hero>, attack: Map<String, Int>) {

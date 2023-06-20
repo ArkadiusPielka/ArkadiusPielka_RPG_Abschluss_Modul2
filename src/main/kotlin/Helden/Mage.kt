@@ -3,7 +3,6 @@ package Helden
 import Gegner.Opponent
 import SLEEP_TIME
 import chars
-import enemys
 
 
 class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, dmg) {
@@ -39,7 +38,7 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
         println("1 - ${atkNamen.elementAt(0)}: Macht ${atkDmg.elementAt(0)} schaden und stellt ${this.rescueRecovery} ${this.thisResource} her.")
         println("2 - ${atkNamen.elementAt(1)}: Heilt alle Helden um ${atkDmg.elementAt(1)} HP und kostet ${this.specialAttackCost} ${this.thisResource}.")
         println("3 - ${atkNamen.elementAt(2)}: Macht ${atkDmg.elementAt(2)} schaden an allen Gegnern, und kostet ${this.rescueRecovery} ${this.thisResource}.")
-        println("4 - Beutel")
+        println("4 - Inventar")
     }
 
     override fun spezialAttack(target: Opponent, player: MutableList<Hero>, attack: Map<String, Int>,a: Int, b: Int) {
@@ -49,14 +48,11 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
         val atkNamen = attack.keys
         val attacke = atkNamen.elementAt(1)
         val healing = attack[attacke]!!
+        var needHeal = chars.filter { it.currentHP < it.maxHP }
 
         println("'${this.name}' Heilt alle mit '$attacke':")
 
-        var healNeeded: Boolean? = null
-        for (char in player) {
-            if (healNeeded != null || healNeeded == false) {
-                println("Es braucht keiner eine Heilung")
-            }
+        for (char in needHeal) {
             if (char.currentHP <= 0) {
                 println("${char.name} ist besiegt und kann nicht geheilt werden ${char.maxHP}/${char.maxHP}")
             } else if (char.currentHP < char.maxHP) {
@@ -68,13 +64,12 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
                 } else {
                     char.currentHP += healing
                     println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
-                    healNeeded = true
                 }
             }
-            this.resurce -= this.specialAttackCost!!
-            println()
-            Thread.sleep(SLEEP_TIME)
         }
+        this.resurce -= this.specialAttackCost!!
+        println()
+        Thread.sleep(SLEEP_TIME)
     }
 }
 

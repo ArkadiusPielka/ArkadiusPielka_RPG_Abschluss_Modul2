@@ -6,26 +6,27 @@ fun main() {
     println("Die helden werden generiert")
     println()
     Thread.sleep(SLEEP_TIME)
-    heldenErstellenNeu()
+    createHeroes()
     println("Der Boss wird erstellt:")
-    bossErstellen()
+    createBoss()
     Thread.sleep(SLEEP_TIME)
     boss.spezialAttackBoss()
     println("Der Kampf beginnt!!")
     println()
     var i = 0
     do {
-    if (chars.isEmpty()) {
-        println("Game OVER ... alle Helden sind von uns gegangen")
-        break
-    } else if (enemys.isEmpty()) {
-        println()
-        println("Herzlichen glückwunsch Sie haben Gewonnen.")
-        break
-    }
+        if (chars.isEmpty()) {
+            println("Game OVER ... alle Helden sind von uns gegangen")
+            break
+        } else if (enemys.isEmpty()) {
+            println()
+            println("Herzlichen glückwunsch Sie haben Gewonnen.")
+            break
+        }
         println("---- Runde ${i + 1} ---")
-        println()
+
         theFight()
+
         i++
     } while (boss.hp > 0 || (warrior.currentHP > 0 || monk.currentHP > 0 || mage.currentHP > 0))
 }

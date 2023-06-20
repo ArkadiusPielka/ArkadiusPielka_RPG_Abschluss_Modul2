@@ -38,13 +38,13 @@ class Warrior(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, leve
         println("1 - ${atkNamen.elementAt(0)}: Macht ${atkDmg.elementAt(0)} schaden und stellt ${this.rescueRecovery} ${this.thisResource} her.")
         println("2 - ${atkNamen.elementAt(1)}: Führt $numberOfHits angriffe durch die pro schlag ${atkDmg.elementAt(1)} schaden anrichten und kostet ${this.specialAttackCost} ${this.thisResource}.")
         println("3 - ${atkNamen.elementAt(2)}: Macht ${atkDmg.elementAt(2)} schaden an allen Gegnern, und kostet ${this.rescueRecovery} ${this.thisResource}.")
-        println("4 - Beutel")
+        println("4 - Inventar")
     }
 
     override fun spezialAttack(target: Opponent, player: MutableList<Hero>, attack: Map<String, Int>,a: Int, b: Int) {
+
         val atkNamen = attack.keys.toList()
         val attacke = atkNamen.elementAt(1)
-        val numberOfHits = 3
         val damage = numberOfHits * attack[attacke]!!
 
         this.resurce -= specialAttackCost!!

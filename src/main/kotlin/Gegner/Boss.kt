@@ -3,6 +3,7 @@ package Gegner
 import Helden.Hero
 import SLEEP_TIME
 import bossHelper
+import createBossHelper
 import chars
 import deadChars
 import enemys
@@ -42,7 +43,7 @@ class Boss(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) {
         if (attacke == "Beschwören") {
             println("'${this.name}' führt eine '$attacke' durch.")
             println()
-            bossHelper()
+            createBossHelper()
             enemys.add(bossHelper)
             attack.remove(attacke)
         }
