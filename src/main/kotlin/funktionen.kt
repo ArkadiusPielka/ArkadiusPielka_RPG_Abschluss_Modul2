@@ -8,6 +8,7 @@ import Helden.Monk
 import Helden.Warrior
 import Inventory.Healpotion
 import Inventory.Item
+import Inventory.Scroll
 
 // Helden werden Generiert
 var LEVEL = 5
@@ -33,6 +34,7 @@ var enemys: MutableList<Opponent> = mutableListOf(boss)
 
 var bag: MutableList<Item> = mutableListOf(
     Healpotion("Heiltrank", 3),
+    Scroll("Wiederbelebungs-Rolle",1)
 )
 
 
@@ -149,12 +151,11 @@ fun theFight() {
 
 
 fun heldenErstellenNeu() {
-// .padEnd(8, '4')
-    println("--- Klasse Krieger ---\t\t\t" + "--- Klasse Magier ---\t\t\t" + "--- Klasse Mönch ---")
-    println("Name: ${warrior.name}\tLevel: ${warrior.startLevel}\t\t\t" + "Name: ${mage.name}\tLevel: ${mage.startLevel}\t\t\t" + "Name: ${monk.name}\tLevel: ${monk.startLevel}")
-    println("HP: ${warrior.currentHP}/${warrior.maxHP}\tWut: ${warrior.resurce}/${warrior.maxResource}\t\t\t" + "HP: ${mage.currentHP}/${mage.maxHP}\t Mana: ${mage.resurce}/${mage.maxResource}\t\t" + "HP: ${monk.currentHP}/${monk.maxHP}\t Chakra: ${monk.resurce}/${monk.maxResource}")
+
+    println("--- Klasse Krieger ---\t\t\t\t" + "--- Klasse Magier ---\t\t\t\t" + "--- Klasse Mönch ---")
+    println("Name: ${warrior.name}\tLevel: ${warrior.startLevel}\t\t\t\t" + "Name: ${mage.name}\tLevel: ${mage.startLevel}\t\t\t\t" + "Name: ${monk.name}\tLevel: ${monk.startLevel}")
+    println("HP: ${warrior.currentHP}/${warrior.maxHP}\tWut: ${warrior.resurce}/${warrior.maxResource}\t\t\t\t" + "HP: ${mage.currentHP}/${mage.maxHP}\t Mana: ${mage.resurce}/${mage.maxResource}\t\t\t" + "HP: ${monk.currentHP}/${monk.maxHP}\t Chakra: ${monk.resurce}/${monk.maxResource}")
     println()
-//    Thread.sleep(SLEEP_TIME / 2)
 
 }
 

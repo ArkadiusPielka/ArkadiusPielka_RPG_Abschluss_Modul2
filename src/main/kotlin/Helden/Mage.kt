@@ -15,11 +15,11 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
     override var maxResource: Int = 20 * startLevel
     override var resurce: Int = maxResource
     var dmgNwe = 20 * startLevel
-    var thisResource = "Mana"
-    var classPlayer = "Magier"
-    var rescueRecovery = 20
-    var specialAttackCost = maxResource - 20
-    var aoeCost = 20
+    override var thisResource = "Mana"
+    override var classPlayer = "Magier"
+    override var rescueRecovery: Int? = 20
+    override var specialAttackCost: Int? = maxResource - 20
+    override var aoeCost: Int? = 20
 
     override var attacke = mutableMapOf<String, Int>(
         "Feuerball" to dmgNwe * 2,
@@ -32,7 +32,7 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
 //        this.name = readln()
 //    }
 
-    fun attackSelection(attack: Map<String, Int>) {
+    override fun attackSelection(attack: Map<String, Int>) {
         var atkNamen = attack.keys
         var atkDmg = attack.values
         println("Sie haben folgende Optionen")
@@ -42,44 +42,7 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
         println("4 - Beutel")
     }
 
-    fun standartAttack(target: Opponent, attack: Map<String, Int>, a: Int, b: Int) {
-
-        var atkNamen = attack.keys
-        var attacke = atkNamen.elementAt(0)
-        val resourceNew = this.resurce + this.rescueRecovery
-        var crit = (1..100).random()
-
-        if (resourceNew > this.maxResource) {
-            this.resurce = this.maxResource
-        } else {
-            this.resurce += this.rescueRecovery
-        }
-
-        if (crit <= critChanze) {
-            var damage = attack[attacke]!! * 2
-            target.hp -= damage
-            println("Sie haben $attacke gewählt.")
-            println("'${this.name}' greift '${target.name}' mit '$attacke' an, der ${attack[attacke]} verursacht.")
-            println()
-            println("--- ${target.name} wird kritischen getroffen und bekommt doppelten schaden $damage ---")
-        } else {
-            target.hp -= attack[attacke]!!
-            println("Sie haben $attacke gewählt.")
-            println("'${this.name}' greift '${target.name}' mit '$attacke' an")
-            println()
-            println("--- ${target.name} erleidet ${attack[attacke]} schaden---")
-        }
-
-        if (target.hp <= 0) {
-            println("${target.name} wurde besiegt")
-            println()
-            enemys.remove(target)
-        }
-        Thread.sleep(SLEEP_TIME)
-
-    }
-
-    fun spezialAttacOnPlayer(player: MutableList<Hero>, attack: Map<String, Int>) {
+    override fun spezialAttack(target: Opponent, player: MutableList<Hero>, attack: Map<String, Int>,a: Int, b: Int) {
 
 // TODO heilung noch anpassen
 
@@ -89,8 +52,11 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
 
         println("'${this.name}' Heilt alle mit '$attacke':")
 
-        var healNeeded = false
-        for (char in player)
+        var healNeeded: Boolean? = null
+        for (char in player) {
+            if (healNeeded != null || healNeeded == false) {
+                println("Es braucht keiner eine Heilung")
+            }
             if (char.currentHP <= 0) {
                 println("${char.name} ist besiegt und kann nicht geheilt werden ${char.maxHP}/${char.maxHP}")
             } else if (char.currentHP < char.maxHP) {
@@ -104,111 +70,12 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
                     println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
                     healNeeded = true
                 }
-                if (!healNeeded) {
-                    println("Es braucht keiner eine Heilung")
-                }
             }
-        this.resurce -= specialAttackCost
-        println()
-        Thread.sleep(SLEEP_TIME)
-    }
-
-    fun aoeDmgHero(attack: Map<String, Int>, a: Int, b: Int) {
-
-        var atkNamen = attack.keys
-        var attacke = atkNamen.elementAt(2)
-        var deadInFight = mutableListOf<Opponent>()
-        println()
-        println("'${this.name}' greift mit '${attacke}' an und richtet ${attack[attacke]} schaden an allen gegnern an.")
-        println()
-        for (enemy in enemys) {
-            val crit = (1..100).random()
-            if (crit <= critChanze) {
-                val damage = attack[attacke]!! * 2
-                enemy.hp -= damage
-                println("--- ${enemy.name} erleidet doppelten schade ${damage} ---")
-                if (enemy.hp <= 0) {
-                    println()
-                    println("${enemy.name} wurde besiegt")
-                    println()
-                    deadInFight.add(enemy)
-                }
-
-            } else {
-                enemy.hp -= attack[attacke]!!
-                println("--- ${enemy.name} erleidet ${attack[attacke]} schaden---")
-                if (enemy.hp <= 0) {
-                    println()
-                    println("${enemy.name} wurde besiegt")
-                    println()
-                    deadInFight.add(enemy)
-                }
-
-            }
+            this.resurce -= this.specialAttackCost!!
+            println()
+            Thread.sleep(SLEEP_TIME)
         }
-        enemys.removeAll(deadInFight)
-        println()
-        Thread.sleep(SLEEP_TIME)
-        this.resurce -= aoeCost
     }
-
-    override fun attack(target: Opponent, attack: MutableMap<String, Int>, a: Int, b: Int) {
-
-        this.resurce = a
-        this.maxResource = b
-        this.level = startLevel
-
-        println("--- ${this.classPlayer} ist an der Reihe ---")
-        this.attackSelection(attack)
-
-        var eingabe: Int? = null
-        do {
-
-            try {
-                eingabe = readln().toInt()
-
-                when (eingabe) {
-
-                    1 -> {
-                        this.standartAttack(target, attack, a, b)
-                        break
-                    }
-
-                    2 -> {
-                        if (a >= specialAttackCost) {
-                            this.spezialAttacOnPlayer(chars, attack)
-
-                        } else {
-                            println("Sie haben nicht genug $thisResource")
-                            println("Die standert Attacke wird ausgeführt.")
-                            this.standartAttack(target, attack, a, b)
-                        }
-                    }
-
-                    3 -> {
-                        if (a >= aoeCost) {
-                            this.aoeDmgHero(attack, a, b)
-
-                        } else {
-                            println("Sie haben nicht genug $thisResource")
-                            println("Die standert Attacke wird ausgeführt.")
-                            this.standartAttack(target, attack, a, b)
-                        }
-                    }
-
-                    4 -> {
-//                TODO Beutel einfügen
-                    }
-
-                }
-            } catch (e: Exception) {
-                println("Falsche Eingabe: Bitte geben sie eine Zahl zwischen 1 und 4 ein!!")
-            }
-
-        } while (eingabe != 1 && eingabe != 2 && eingabe != 3 && eingabe != 4)
-    }
-
-
 }
 
 
