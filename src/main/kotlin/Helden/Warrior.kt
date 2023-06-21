@@ -7,7 +7,7 @@ import enemys
 class Warrior(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, dmg) {
 
     override var startLevel = (5 until 10).random()
-    override var maxHP: Int = hp * startLevel
+    override var maxHP: Int = hp * startLevel +1000
     override var currentHP = maxHP
     override var resurce: Int = 40
     override var maxResource: Int = 100
@@ -18,7 +18,9 @@ class Warrior(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, leve
     override var rescueRecovery: Int? = 20
     override var specialAttackCost: Int? = 40
     override var aoeCost: Int? = 20
-
+    override var isDead = false
+    override var hasBuff: Boolean = false
+    override var hasDebuff: Boolean = false
 
     override var attacke = mutableMapOf<String, Int>(
         "Hieb" to dmgNwe * 2,
@@ -47,7 +49,6 @@ class Warrior(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, leve
         val attacke = atkNamen.elementAt(1)
         val damage = numberOfHits * attack[attacke]!!
 
-        this.resurce -= specialAttackCost!!
         println("'${this.name}' greift '${target.name}' mit '$attacke' an")
         println()
         println("--- ${target.name} erleidet $damage Schaden ---")

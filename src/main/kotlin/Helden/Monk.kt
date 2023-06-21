@@ -9,7 +9,7 @@ class Monk(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
 
 
     override var startLevel = (5 until 10).random()
-    override var maxHP: Int = hp * startLevel
+    override var maxHP: Int = startLevel
     override var currentHP = maxHP
     override var resurce: Int = 6
     override var maxResource: Int = 6
@@ -19,7 +19,9 @@ class Monk(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
     override var rescueRecovery: Int? = 2
     override var specialAttackCost: Int? = 4
     override var aoeCost: Int? = 4
-
+    override var isDead = false
+    override var hasBuff: Boolean = false
+    override var hasDebuff: Boolean = false
 
     override var attacke = mutableMapOf(
         "Faustschlag" to dmgNwe * 2,

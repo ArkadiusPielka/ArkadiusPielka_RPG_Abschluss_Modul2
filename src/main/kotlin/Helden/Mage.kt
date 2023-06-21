@@ -19,6 +19,9 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
     override var rescueRecovery: Int? = 20
     override var specialAttackCost: Int? = maxResource - 20
     override var aoeCost: Int? = 20
+    override var isDead = false
+    override var hasBuff: Boolean = false
+    override var hasDebuff: Boolean = false
 
     override var attacke = mutableMapOf<String, Int>(
         "Feuerball" to dmgNwe * 2,
@@ -53,8 +56,8 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
         println("'${this.name}' Heilt alle mit '$attacke':")
 
         for (char in needHeal) {
-            if (char.currentHP <= 0) {
-                println("${char.name} ist besiegt und kann nicht geheilt werden ${char.maxHP}/${char.maxHP}")
+            if (char.isDead) {
+                println("${char.name} ist besiegt und kann nicht geheilt werden ${char.currentHP}/${char.maxHP}")
             } else if (char.currentHP < char.maxHP) {
                 val life = char.currentHP
                 val newHP = healing + life

@@ -7,7 +7,8 @@ import chars
 import deadChars
 import enemys
 import potion
-import scroll
+import scroll1
+import scroll2
 
 
 // klasse für helden
@@ -29,7 +30,9 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
     open var thisResource = ""
     open var aoeCost: Int? = null
     open var rescueRecovery: Int? = null
-    open var isDead = Boolean
+    open var isDead: Boolean = false
+    open var hasBuff: Boolean = false
+    open var hasDebuff: Boolean = false
 
     open fun attackSelection(attack: Map<String, Int>) {}
 
@@ -116,6 +119,11 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
         this.maxResource = b
         this.level = startLevel
 
+        if (this.isDead) {
+            println("${this.name} ist tot und kann nicht angreifen.")
+            return
+        }
+
         println("--- ${this.classPlayer} ist an der Reihe ---")
         this.attackSelection(attack)
 
@@ -180,7 +188,7 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
 
         var input: Int? = null
 
-        while (input !in listOf(0, 1, 2)) {
+        while (input !in listOf(0, 1, 2, 3)) {
             try {
                 input = readln().toInt()
 
@@ -195,6 +203,9 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
             healPotion(target, attack, a, b)
         }
         if (input == 2) {
+            dmgRole(target, attack, a, b)
+        }
+        if (input == 3) {
             revivalRole(target, attack, a, b)
         }
     }
@@ -203,14 +214,19 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
 
         var needPoition = chars.filter { it.currentHP < it.maxHP }
 
-        println("Wer soll den Heiltrank (stellt 50% der max. HP wieder her) bekommen?")
+        println("Wer soll den 'Heiltrank' (stellt 50% der max. HP wieder her) bekommen?")
         println("0 - Zurück")
-        for (i in needPoition) {
-            println("${needPoition.indexOf(i) + 1} - ${i.name} - HP: ${i.currentHP}/${i.maxHP}")
+        for (hero in needPoition) {
+            if (hero.isDead){
+                continue
+            } else {
+                println("${needPoition.indexOf(hero) + 1} - ${hero.name} - HP: ${hero.currentHP}/${hero.maxHP}")
+            }
         }
         if (potion.anzahl == 0) {
             println("Sie haben keine Heiltränke mehr.")
-            this.attack(target, attack, a, b)
+            Thread.sleep(SLEEP_TIME)
+            inventory(target, attack, a, b)
         }
 
         var input: Int? = null
@@ -219,7 +235,7 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
             try {
                 input = readlnOrNull()?.toInt()
                 if (input == 0) {
-                    this.attack(target, attack, a, b)
+                    inventory(target, attack, a, b)
                 }
                 if (input != null) {
                     if (input > needPoition.size) {
@@ -239,7 +255,6 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
                         }
                         potion.anzahl -= 1
                     }
-
                 }
             } catch (e: NumberFormatException) {
 //                        wenn ein String eingegeben wird
@@ -253,14 +268,15 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
 
         var needRevival = deadChars
 
-        println("Wem wollen sie Wiederbeleben mit 50% HP??")
+        println("Wem wollen sie 'Wiederbeleben' mit 50% HP??")
         println("0 - Zurück")
         for (i in needRevival) {
             println("${needRevival.indexOf(i) + 1} - ${i.name} - HP: ${i.currentHP}/${i.maxHP}")
         }
-        if (scroll.anzahl == 0) {
+        if (scroll1.anzahl == 0) {
             println("Sie haben keine Rolle der Wiederbelebung mehr.")
-            this.attack(target, attack, a, b)
+            Thread.sleep(SLEEP_TIME)
+            inventory(target, attack, a, b)
         }
 
         var input: Int? = null
@@ -269,7 +285,7 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
             try {
                 input = readlnOrNull()?.toInt()
                 if (input == 0) {
-                    this.attack(target, attack, a, b)
+                    inventory(target, attack, a, b)
                 }
                 if (input != null) {
                     if (input > needRevival.size) {
@@ -281,10 +297,11 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
                         selectedHero.currentHP += heal
 
                         println("${selectedHero.name} wurde wiederbelebt ${selectedHero.currentHP}/${selectedHero.maxHP}")
-                        chars.add(selectedHero)
+//                        chars.add(selectedHero)
+                        selectedHero.isDead = false
                         deadChars.remove(selectedHero)
-                        scroll.anzahl -= 1
-
+                        scroll1.anzahl -= 1
+                        break
                     }
                 }
             } catch (e: NumberFormatException) {
@@ -293,6 +310,55 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
             }
         }
         Thread.sleep(SLEEP_TIME)
+
+    }
+
+    fun dmgRole(target: Opponent, attack: MutableMap<String, Int>, a: Int, b: Int) {
+
+
+        println("Wem wollen sie die 'Rolle des Doppelten Schadens' bekommen??")
+        println("0 - Zurück")
+        for (char in chars) {
+            if (char.isDead){
+                continue
+            } else {
+                println("${chars.indexOf(char) + 1} - ${char.name} - HP: ${char.currentHP}/${char.maxHP}")
+            }
+        }
+        if (scroll2.anzahl == 0) {
+            println("Sie haben keine 'Rolle des Doppelten Schadens' mehr.")
+            Thread.sleep(SLEEP_TIME)
+            inventory(target, attack, a, b)
+        }
+
+        var input: Int? = null
+
+        while (input !in (0..chars.size)) {
+            try {
+                input = readlnOrNull()?.toInt()
+                if (input == 0) {
+                    inventory(target, attack, a, b)
+                }
+                if (input != null) {
+                    if (input > chars.size) {
+                        println("Ungültige Eingabe. Bitte geben Sie 1 oder ${chars.size} ein, oder 0 für zurück..")
+                    } else {
+                        val selectedHero = chars[input - 1]
+                        selectedHero.hasBuff = true
+
+                        println("${selectedHero.name} wurde gebufft und macht mit seinen nächsten Angriffen doppelten Schaden")
+                        println()
+                        scroll2.anzahl -= 1
+                        break
+                    }
+                }
+            } catch (e: NumberFormatException) {
+//                        wenn ein String eingegeben wird
+                println("Ungültige Eingabe. Bitte geben Sie 1 oder ${chars.size} ein.")
+            }
+        }
+        Thread.sleep(SLEEP_TIME)
+
     }
 
 

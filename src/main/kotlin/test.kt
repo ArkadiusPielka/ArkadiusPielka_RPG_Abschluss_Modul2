@@ -10,13 +10,13 @@ fun main() {
     println("Der Boss wird erstellt:")
     createBoss()
     Thread.sleep(SLEEP_TIME)
-    boss.spezialAttackBoss()
+//    boss.spezialAttackBoss()
     println("Der Kampf beginnt!!")
     println()
     var i = 0
     do {
-        if (chars.isEmpty()) {
-            println("Game OVER ... alle Helden sind von uns gegangen")
+        if (deadChars.size == 3) {
+            println("Game OVER ... alle Helden sind Valhalla an Odins seite.")
             break
         } else if (enemys.isEmpty()) {
             println()

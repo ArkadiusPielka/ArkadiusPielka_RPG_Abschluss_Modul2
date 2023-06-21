@@ -32,10 +32,11 @@ var bossHelper = BossHelper("Skelett-Krieger", 800, 3000)
 
 var enemys: MutableList<Opponent> = mutableListOf(boss)
 
-var scroll = Scroll("Rolle der Wiederbelebung", 1)
+var scroll1 = Scroll("Rolle der Wiederbelebung", 1)
+var scroll2 = Scroll("Rolle des Doppelten Schadens", 3)
 var potion = Healpotion("Heiltrank", 3)
 
-var bag: MutableList<Item> = mutableListOf(potion,scroll)
+var bag: MutableList<Item> = mutableListOf(potion, scroll2, scroll1)
 
 
 //Boss wird in der konsole ausgegeben
@@ -58,6 +59,7 @@ fun enemyInFight() {
         println()
 
     } else {
+        println("--- Der Boss ---")
         println("--- ${boss.name} ---")
         println("HP: ${boss.hp}/${boss.maxHP}")
         println()
@@ -82,14 +84,44 @@ fun createHeroes() {
 
 }
 
+fun moreDmg(hero: Hero){
+
+    val dmgAttack1 = hero.attacke.values.elementAt(0)
+    val dmgAttack2 = hero.attacke.values.elementAt(1)
+    val dmgAttack3 = hero.attacke.values.elementAt(2)
+
+    val newDmgAttack1 = dmgAttack1 * 2
+    val newDmgAttack2 = dmgAttack2 * 2
+    val newDmgAttack3 = dmgAttack3 * 2
+
+    hero.attacke[hero.attacke.keys.elementAt(0)] = newDmgAttack1
+    hero.attacke[hero.attacke.keys.elementAt(1)] = newDmgAttack2
+    hero.attacke[hero.attacke.keys.elementAt(2)] = newDmgAttack3
+
+    hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
+
+    hero.attacke[hero.attacke.keys.elementAt(0)] = dmgAttack1
+    hero.attacke[hero.attacke.keys.elementAt(1)] = dmgAttack2
+    hero.attacke[hero.attacke.keys.elementAt(2)] = dmgAttack3
+
+    hero.hasBuff = false
+
+}
+
 fun theFight() {
 
     if (enemys.size == 1) {
 
         for (hero in chars) {
-            enemyInFight()
-            createHeroes()
-            if (hero.currentHP > 0) {
+            if (hero.isDead) {
+                continue
+            } else {
+                enemyInFight()
+                createHeroes()
+                if (hero.hasBuff){
+                    moreDmg(hero)
+                    continue
+                }
                 hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
             }
         }
@@ -100,6 +132,9 @@ fun theFight() {
         var bossHelperAlive = true
 
         for (hero in chars) {
+            if (hero.isDead) {
+                continue
+            }
             if (enemys.isEmpty()) {
                 break
             }
@@ -107,7 +142,7 @@ fun theFight() {
             enemyInFight()
             createHeroes()
             if (bossHelperAlive) {
-                println("Wen wollen Sie angreifen? ${hero.name} ")
+                println("${hero.classPlayer}: ${hero.name} - Wen wollen Sie angreifen?  ")
                 for (i in enemys) {
                     println("${enemys.indexOf(i) + 1} - ${i.name} - HP: ${i.hp}/${i.maxHP}")
                 }
@@ -129,10 +164,20 @@ fun theFight() {
                     }
                 }
                 if (input == 1) {
-                    hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
+                    if (hero.hasBuff){
+                        moreDmg(hero)
+                        continue
+                    } else {
+                        hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
+                    }
 
                 } else {
-                    hero.attack(bossHelper, hero.attacke, hero.resurce, hero.maxResource)
+                    if (hero.hasBuff){
+                        moreDmg(hero)
+                        continue
+                    }else {
+                        hero.attack(bossHelper, hero.attacke, hero.resurce, hero.maxResource)
+                    }
                     if (bossHelper.hp <= 0) {
                         bossHelperAlive = false
                     }
@@ -141,7 +186,11 @@ fun theFight() {
                 if (enemys.isEmpty()) {
                     break
                 } else {
-                    hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
+                    if (hero.hasBuff){
+                        moreDmg(hero)
+                    }else {
+                        hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
+                    }
                 }
             }
         }
