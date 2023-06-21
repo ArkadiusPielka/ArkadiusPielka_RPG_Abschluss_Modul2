@@ -198,7 +198,7 @@ fun theFight() {
 
         } else {
             for (enemy in enemys) {
-                if (chars.isEmpty()) {
+                if (deadChars.size == 3) {
                     break
                 } else {
                     enemy.attack(chars, enemy.attack)

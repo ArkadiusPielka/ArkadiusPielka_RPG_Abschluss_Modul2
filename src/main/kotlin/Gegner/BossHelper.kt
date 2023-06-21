@@ -33,7 +33,6 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
             }
         }
         deadChars.addAll(deadInFight)
-//        chars.removeAll(deadInFight)
         println()
         Thread.sleep(SLEEP_TIME)
     }
@@ -41,7 +40,7 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
     override fun attack(target: MutableList<Hero>, attack: Map<String, Int>) {
 
         var atkNamen = attack.keys.toList().random()
-
+        var hero = chars.random()
 
         println("--- ${this.name} ist an der Reihe ---")
         println()
@@ -50,25 +49,21 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
         if (atkNamen == "Stacheln") {
             this.aoeDamage(target, attack)
         } else {
-            while (true) {
-                var hero = chars.random()
-                if (!hero.isDead) {
-                    println("'${this.name}' greift '${hero.name}' mit '$atkNamen' und richtet ${attack[atkNamen]} schaden an")
-                    hero.currentHP -= attack[atkNamen]!!
-                }
+            while (hero.isDead) {
+                hero = chars.random()
+            }
+            println("'${this.name}' greift '${hero.name}' mit '$atkNamen' und richtet ${attack[atkNamen]} schaden an")
+            hero.currentHP -= attack[atkNamen]!!
 
-                if (hero.currentHP <= 0) {
-                    deadChars.add(hero)
-//                chars.remove(hero)
-                    println("${hero.name} wurde besiegt")
-                    hero.currentHP = 0
-                    hero.isDead = true
-                    println()
-                } else {
-                    println("${hero.name} hat noch ${hero.currentHP}/${hero.maxHP}")
-                    println()
-                }
-                break
+            if (hero.currentHP <= 0) {
+                deadChars.add(hero)
+                println("${hero.name} wurde besiegt")
+                hero.currentHP = 0
+                hero.isDead = true
+                println()
+            } else {
+                println("${hero.name} hat noch ${hero.currentHP}/${hero.maxHP}")
+                println()
             }
         }
     }
