@@ -25,17 +25,17 @@ class Boss(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) {
     fun dot(attack: Map<String, Int>) {
         val atkNamen = "Blutung"
         var deadInFight = mutableListOf<Hero>()
-//        println()
         var hero = chars.random()
+
         while (hero.isDead) {
             hero = chars.random()
         }
-//        for (hero in target) {
-//            if (hero != deadChars) {
+
         println("'${this.name}' greift '${hero.name}' mit '$atkNamen' an und verursacht ${attack[atkNamen]} Schaden")
         println("'${hero.name}' erleidet eine offene Wunde, die pro Runde ${attack[atkNamen]?.div(2)} Schaden anrichtet")
         println()
         hero.currentHP -= attack[atkNamen]!!
+
         if (hero.currentHP <= 0) {
             deadInFight.add(hero)
             println("${hero.name} wurde besiegt")
@@ -49,8 +49,6 @@ class Boss(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) {
         dotActiv = true
         deadChars.addAll(deadInFight)
 
-//            }
-//        }
     }
 
     fun aoeDamage(attack: Map<String, Int>) {
@@ -77,14 +75,12 @@ class Boss(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) {
 
     fun spezialAttackBoss() {
         var atkNamen = "Beschwören"
-//        var attacke = atkNamen.elementAt(2)
-//        if (attacke == "Beschwören") {
+
         println("'${this.name}' führt eine '$atkNamen' durch.")
         println()
         createBossHelper()
         enemys.add(bossHelper)
         attack.remove(atkNamen)
-//        }
     }
 
     fun bossHeal() {

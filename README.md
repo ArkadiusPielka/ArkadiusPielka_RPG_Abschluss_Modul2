@@ -1,7 +1,11 @@
 # ArkadiusPielka_RPG_Abschluss_Modul2
 
-Grundlagen der Programmierung
-Abschlussaufgabe
+<details><summary>Aufgabenstellung</summary>
+
+Grundlagen der Programmierung  
+
+Abschlussaufgabe 
+
 Hinweis: Lies die Aufgabe aufmerksam. Versuche vor Beginn, die Aufgabe zu strukturieren. Notiere
 dir skizzenartig, was dein Programm braucht und setze deinen Plan Schritt für Schritt um.
 
@@ -85,3 +89,64 @@ Voraussetzungen hierfür sind, dass der Aufwand in etwa vergleichbar ist mit der
 dass gewisse Grundfunktionalitäten wie Klassen, Vererbung, Schleifen, Verzweigungen und
 Funktionen genutzt werden.
 Eigene Projekte sind nur in Absprache mit dem Dozent erlaubt!
+</details>
+
+___
+
+<details><summary>Präsentation</summary>
+
+---
+<details><summary>Was macht mein Programm</summary>
+
+Es simuliert einen rundenbasierten Kampf gegen einen Boss.  
+Dieser kann im Kampf einen Helfer herbeirufen.
+
+</details>
+
+---
+
+<details><summary>Helden Diagramm</summary>
+
+Nach dem durchlesen der Aufgabenstellung hab ich mir so in etwa mein Klassendiagramm für meine Helden vorgestellt.
+
+<img src="Heroes.png"/>
+</details>
+
+---
+
+<details><summary>Gegner Diagramm</summary>
+
+Und so sollten dann in etwa die gegner aussehen:
+
+<img src="Opponent.png"/>
+</details>
+
+---
+
+<details><summary>Welcher Abschnitt hat mich viel Energie gekostet?</summary>
+
+<img src="twoEnemys.png"/>
+
+Dieser kleine Abschnitt, der in meiner funktion ist, der eine runde kampf simuliert, hat mich einiges an Zeit gekostet, denn ich wollte es so haben, das wenn in einer Runde der Boss Helfer stirbt,
+dieser nicht mehr angezeigt wird und die Helden keine Auswahl mehr haben wen sie angreifen wollen, sondern alle Attacken wieder automatisch auf den Boss gehen.  
+
+Auf welchen Abschnitt bin ich besonders Stolz  
+Genau auf diesen Abschnitt, das ich es so hinbekommen hab wie ich es mir vorgestellt hab.
+</details>
+
+---
+
+<details><summary>Welcher Abschnitt war überraschend (einfach/schwierig)</summary>
+
+Überraschenderweise fand ich das mit der Wiederbelebung eines helden etwas komplexer als gedacht.  
+
+Wenn ein gegner einen Helden getötet hat, wurde er in eine separate liste verschoben und aus der aktiven heldenliste gelöscht. Das funktionierte gut.  
+
+Allerdings hatte ich dann das Problem, das ich beim Wiederbeleben, das nicht wieder rückgängig machen konnte, bzw. es funktionierte nur hat dann die Schleife einen fehler ausgeworfen.
+
+Nach einem kurzen Gespräch mit Lukas Altmann (danke dafür) hat er vorgeschlagen es mit true und false zu versuchen.
+
+Und auch Justus Finke möchte ich danke, der mir bei einem problem beim Inventory geholfen hat, indem er sagte, du machst das zu kompliziert.  
+Initialisere die gegenstände einfach vorher, bevor du sie in deine Liste packst.
+</details>
+</details>
