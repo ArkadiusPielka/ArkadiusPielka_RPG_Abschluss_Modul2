@@ -53,6 +53,10 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
         val healing = attack[attacke]!!
         var needHeal = chars.filter { it.currentHP < it.maxHP }
 
+        if (needHeal.isEmpty()){
+            println("Es braucht keiner eine Heilung")
+        }
+
         println("'${this.name}' Heilt alle mit '$attacke':")
 
         for (char in needHeal) {

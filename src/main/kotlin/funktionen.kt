@@ -53,6 +53,7 @@ fun createBoss() {
 fun enemyInFight() {
 
     if (enemys.size == 2) {
+        println()
         println("--- Der Boss ---\t\t\t\t --- Der Helfer ---")
         println("--- ${boss.name} ---\t\t --- ${bossHelper.name} ---")
         println("HP: ${boss.hp}/${boss.maxHP}\t\t\t\t\t HP: ${bossHelper.hp}/${bossHelper.maxHP}")
@@ -70,7 +71,7 @@ fun enemyInFight() {
 fun createBossHelper() {
 
     Thread.sleep(SLEEP_TIME / 2)
-    println("--- ${bossHelper.name} ---")
+    println("--- Der '${bossHelper.name}' ist erschienen---")
     println("Name: ${bossHelper.name}\t")
     println("HP: ${bossHelper.hp}/${bossHelper.maxHP}")
     println()
@@ -133,11 +134,35 @@ fun moreDmgBossHelper(hero: Hero){
 
 }
 
+fun heroHasDot(target: MutableList<Hero>, attack: Map<String, Int>){
+
+    for (hero in target)
+        if (hero.isDead && hero.hasDebuff){
+            hero.hasDebuff = false
+            boss.dotActiv = false
+        } else if (hero.hasDebuff && hero.currentHP >= hero.maxHP * 0.2){
+            val atkNamen = "Blutung"
+            println("'${hero.name}' erleidet durch die offene Wunde ${attack[atkNamen]?.div(2)} schaden")
+            hero.currentHP -= attack[atkNamen]!! / 2
+            println("${hero.name} hat noch ${hero.currentHP}/${hero.maxHP}")
+            println()
+        } else if (hero.hasDebuff && hero.currentHP <= hero.maxHP * 0.2){
+            println("Die Wunde von '${hero.name}' hat aufgehört zu bluten")
+            println()
+            hero.hasDebuff = false
+            boss.dotActiv = false
+        }
+}
+
 fun theFight() {
 
     if (enemys.size == 1) {
 
         for (hero in chars) {
+            if (hero.hasDebuff){
+                heroHasDot(chars, boss.attack)
+                continue
+            }
             if (hero.isDead) {
                 continue
             } else {
@@ -157,13 +182,17 @@ fun theFight() {
         var bossHelperAlive = true
 
         for (hero in chars) {
+            if (hero.hasDebuff){
+                heroHasDot(chars, boss.attack)
+                continue
+            }
             if (hero.isDead) {
                 continue
             }
             if (enemys.isEmpty()) {
                 break
             }
-            println()
+//            println()
             enemyInFight()
             createHeroes()
             if (bossHelperAlive) {

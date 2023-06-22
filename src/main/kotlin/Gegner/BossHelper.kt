@@ -17,7 +17,7 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
     fun aoeDamage(attack: Map<String, Int>) {
         var atkNamen = "Stacheln"
         var deadInFight = mutableListOf<Hero>()
-        println("'${this.name}' greift alle mit '$atkNamen' an")
+        println("'${this.name}' greift alle mit '$atkNamen' an und verursacht ${attack[atkNamen]} Schaden")
         for (char in chars) {
             if (char.isDead) {
                 continue
@@ -52,7 +52,7 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
             while (hero.isDead) {
                 hero = chars.random()
             }
-            println("'${this.name}' greift '${hero.name}' mit '$atkNamen' und richtet ${attack[atkNamen]} schaden an")
+            println("'${this.name}' greift '${hero.name}' mit '$atkNamen' an und verursacht ${attack[atkNamen]} Schaden")
             hero.currentHP -= attack[atkNamen]!!
 
             if (hero.currentHP <= 0) {
@@ -60,7 +60,7 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
                 println("${hero.name} wurde besiegt")
                 hero.currentHP = 0
                 hero.isDead = true
-//                println()
+                println()
             } else {
                 println("${hero.name} hat noch ${hero.currentHP}/${hero.maxHP}")
                 println()

@@ -49,10 +49,10 @@ class Warrior(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, leve
         val attacke = atkNamen.elementAt(1)
         val damage = numberOfHits * attack[attacke]!!
 
-        println("'${this.name}' greift '${target.name}' mit '$attacke' an")
+        println("'${this.name}' greift '${target.name}' mit '$attacke' an und verursacht $damage Schaden")
         println()
         println("--- ${target.name} erleidet $damage Schaden ---")
-        println()
+//        println()
         target.hp -= damage
         Thread.sleep(SLEEP_TIME / 2)
         if (target.hp <= 0) {

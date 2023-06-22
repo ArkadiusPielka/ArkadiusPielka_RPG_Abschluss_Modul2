@@ -23,7 +23,7 @@ fun main() {
             println("Herzlichen glückwunsch Sie haben Gewonnen.")
             break
         }
-        println("---- Runde ${i + 1} ---")
+        println("-------------------- Runde ${i + 1} --------------------")
 
         theFight()
 

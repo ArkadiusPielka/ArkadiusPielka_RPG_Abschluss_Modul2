@@ -53,15 +53,16 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
             var damage = attack[attacke]!! * 2
             target.hp -= damage
             println("Sie haben $attacke gewählt.")
-            println("'${this.name}' greift '${target.name}' mit '$attacke' an, der ${attack[attacke]} verursacht.")
+            println("'${this.name}' greift '${target.name}' mit '$attacke' an und verursacht ${attack[attacke]} Schaden.")
             println()
             println("--- ${target.name} wird kritischen getroffen und bekommt doppelten schaden $damage ---")
         } else {
             target.hp -= attack[attacke]!!
             println("Sie haben $attacke gewählt.")
-            println("'${this.name}' greift '${target.name}' mit '$attacke' an, der ${attack[attacke]} verursacht.")
+            println("'${this.name}' greift '${target.name}' mit '$attacke' an und verursacht ${attack[attacke]} Schaden.")
             println()
             println("--- ${target.name} erleidet ${attack[attacke]} schaden---")
+            println()
         }
 
         if (target.hp <= 0) {
@@ -69,9 +70,7 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
             println()
             enemys.remove(target)
         }
-        println()
         Thread.sleep(SLEEP_TIME)
-
     }
 
     open fun spezialAttack(target: Opponent, player: MutableList<Hero>, attack: Map<String, Int>, a: Int, b: Int) {}
@@ -108,7 +107,7 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
             }
         }
         enemys.removeAll(deadInFight)
-        println()
+//        println()
         Thread.sleep(SLEEP_TIME)
         this.resurce -= this.aoeCost!!
     }
@@ -119,10 +118,10 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
         this.maxResource = b
         this.level = startLevel
 
-        if (this.isDead) {
-            println("${this.name} ist tot und kann nicht angreifen.")
-            return
-        }
+//        if (this.isDead) {
+//            println("${this.name} ist tot und kann nicht angreifen.")
+//            return
+//        }
 
         println("--- ${this.classPlayer} ist an der Reihe ---")
         this.attackSelection(attack)
@@ -137,13 +136,13 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
 
                     1 -> {
                         this.standardAttack(target, attack, a, b)
-                        break
+//                        break
                     }
 
                     2 -> {
                         if (a >= this.specialAttackCost!!) {
                             this.spezialAttack(target, chars, attack, a, b)
-                            break
+//                            break
                         } else {
                             println("Sie haben nicht genug $thisResource")
                             println("Die standert Attacke wird ausgeführt.")
@@ -166,7 +165,9 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
                         inventory(target, attack, a, b)
 //                TODO Beutel einfügen
                     }
-
+                    else -> {
+                        println("Falsche Zahl: Bitte geben sie eine Zahl zwischen 1 und 4 ein!!")
+                    }
                 }
             } catch (e: Exception) {
                 println("Falsche Eingabe: Bitte geben sie eine Zahl zwischen 1 und 4 ein!!")
@@ -301,6 +302,7 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
                         selectedHero.isDead = false
                         deadChars.remove(selectedHero)
                         scroll1.anzahl -= 1
+                        println()
                         break
                     }
                 }
@@ -347,7 +349,6 @@ open class Hero(var name: String, var hp: Int = 100, var level: Int = 5, var dmg
                         selectedHero.hasBuff = true
 
                         println("${selectedHero.name} wurde gebufft und macht mit seinen nächsten Angriffen doppelten Schaden")
-                        println()
                         scroll2.anzahl -= 1
                         break
                     }

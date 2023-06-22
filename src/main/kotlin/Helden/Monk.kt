@@ -59,7 +59,7 @@ class Monk(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
             enemys.remove(target)
         } else {
             target.hp -= attack[attacke]!!
-            println("Ziel HP über 30%: '${this.name}' greift '${target.name}' mit '$attacke' an und richtet ${attack[attacke]} schaden.")
+            println("Ziel HP über 30%: '${this.name}' greift '${target.name}' mit '$attacke' an und verursacht ${attack[attacke]} Schaden.")
             println()
             println("--- ${target.name} erleidet ${attack[attacke]}Schaden ---")
             println()
@@ -70,7 +70,7 @@ class Monk(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
             }
         }
         this.resurce -= this.specialAttackCost!!
-        println()
+//        println()
         Thread.sleep(SLEEP_TIME / 2)
     }
 }
