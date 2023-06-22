@@ -15,7 +15,9 @@ class Boss(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) {
     override var attack = mutableMapOf<String, Int>(
         "Feueratem" to 200,
         "Kralle" to 300,
-        "Beschwören" to 0
+        "Beschwören" to 0,
+        "Heilung" to 0
+
     )
 
     fun aoeDamage(attack: Map<String, Int>) {
@@ -41,21 +43,32 @@ class Boss(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) {
 
 
     fun spezialAttackBoss() {
-        var atkNamen = attack.keys
-        var attacke = atkNamen.elementAt(2)
-        if (attacke == "Beschwören") {
-            println("'${this.name}' führt eine '$attacke' durch.")
-            println()
-            createBossHelper()
-            enemys.add(bossHelper)
-            attack.remove(attacke)
-        }
+        var atkNamen = "Beschwören"
+//        var attacke = atkNamen.elementAt(2)
+//        if (attacke == "Beschwören") {
+        println("'${this.name}' führt eine '$atkNamen' durch.")
+        println()
+        createBossHelper()
+        enemys.add(bossHelper)
+        attack.remove(atkNamen)
+//        }
+    }
+
+    fun bossHeal() {
+        var atkNamen = "Heilung"
+        println("'${this.name}' führt eine '$atkNamen' durch, und heilt sich um 50%")
+        this.hp = this.hp + this.maxHP / 2
     }
 
     override fun attack(target: MutableList<Hero>, attack: Map<String, Int>) {
 
         var atkNamen = attack.keys.toList().random()
         var hero = chars.random()
+        var crit = (1..100).random()
+
+        while (atkNamen == "Heilung" && (hp <= maxHP / 2 && crit < 50)) {
+            atkNamen = attack.keys.toList().random()
+        }
 
         println("--- ${this.name} ist an der Reihe ---")
         println()
@@ -64,10 +77,15 @@ class Boss(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) {
             this.aoeDamage(attack)
 
             println()
-        } else if (atkNamen == "Beschwören") {
+        }
+        if (atkNamen == "Heilung"){
+            bossHeal()
+
+        }
+        if (atkNamen == "Beschwören") {
             this.spezialAttackBoss()
 
-        } else {
+        } else if (atkNamen == "Kralle"){
             while (hero.isDead) {
                 hero = chars.random()
             }

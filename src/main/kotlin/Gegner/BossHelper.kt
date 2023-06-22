@@ -14,11 +14,11 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
         "Stacheln" to 100
     )
 
-    fun aoeDamage(target: MutableList<Hero>, attack: Map<String, Int>) {
+    fun aoeDamage(attack: Map<String, Int>) {
         var atkNamen = "Stacheln"
         var deadInFight = mutableListOf<Hero>()
         println("'${this.name}' greift alle mit '$atkNamen' an")
-        for (char in target) {
+        for (char in chars) {
             if (char.isDead) {
                 continue
             }
@@ -34,7 +34,7 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
         }
         deadChars.addAll(deadInFight)
         println()
-        Thread.sleep(SLEEP_TIME)
+//        Thread.sleep(SLEEP_TIME)
     }
 
     override fun attack(target: MutableList<Hero>, attack: Map<String, Int>) {
@@ -47,7 +47,7 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
         Thread.sleep(SLEEP_TIME)
 
         if (atkNamen == "Stacheln") {
-            this.aoeDamage(target, attack)
+            this.aoeDamage(attack)
         } else {
             while (hero.isDead) {
                 hero = chars.random()
@@ -60,11 +60,12 @@ class BossHelper(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) 
                 println("${hero.name} wurde besiegt")
                 hero.currentHP = 0
                 hero.isDead = true
-                println()
+//                println()
             } else {
                 println("${hero.name} hat noch ${hero.currentHP}/${hero.maxHP}")
                 println()
             }
         }
+        Thread.sleep(SLEEP_TIME)
     }
 }

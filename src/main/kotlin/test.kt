@@ -10,7 +10,7 @@ fun main() {
     println("Der Boss wird erstellt:")
     createBoss()
     Thread.sleep(SLEEP_TIME)
-//    boss.spezialAttackBoss()
+    boss.spezialAttackBoss()
     println("Der Kampf beginnt!!")
     println()
     var i = 0

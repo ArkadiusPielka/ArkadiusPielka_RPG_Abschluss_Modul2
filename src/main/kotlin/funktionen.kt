@@ -24,11 +24,11 @@ var deadChars: MutableList<Hero> = mutableListOf()
 
 //Der Boss wird erstellt
 
-var boss = Boss("Der Schwarze Ritter", 10000, 10000)
+var boss = Boss("Der Schwarze Ritter", 5000, 10000)
 
 //Der boss beschwört einen helfer
 
-var bossHelper = BossHelper("Skelett-Krieger", 800, 3000)
+var bossHelper = BossHelper("Skelett-Krieger", 3000, 3000)
 
 var enemys: MutableList<Opponent> = mutableListOf(boss)
 
@@ -59,6 +59,7 @@ fun enemyInFight() {
         println()
 
     } else {
+        println()
         println("--- Der Boss ---")
         println("--- ${boss.name} ---")
         println("HP: ${boss.hp}/${boss.maxHP}")
@@ -84,7 +85,7 @@ fun createHeroes() {
 
 }
 
-fun moreDmg(hero: Hero){
+fun moreDmgBoss(hero: Hero){
 
     val dmgAttack1 = hero.attacke.values.elementAt(0)
     val dmgAttack2 = hero.attacke.values.elementAt(1)
@@ -108,6 +109,30 @@ fun moreDmg(hero: Hero){
 
 }
 
+fun moreDmgBossHelper(hero: Hero){
+
+    val dmgAttack1 = hero.attacke.values.elementAt(0)
+    val dmgAttack2 = hero.attacke.values.elementAt(1)
+    val dmgAttack3 = hero.attacke.values.elementAt(2)
+
+    val newDmgAttack1 = dmgAttack1 * 2
+    val newDmgAttack2 = dmgAttack2 * 2
+    val newDmgAttack3 = dmgAttack3 * 2
+
+    hero.attacke[hero.attacke.keys.elementAt(0)] = newDmgAttack1
+    hero.attacke[hero.attacke.keys.elementAt(1)] = newDmgAttack2
+    hero.attacke[hero.attacke.keys.elementAt(2)] = newDmgAttack3
+
+    hero.attack(bossHelper, hero.attacke, hero.resurce, hero.maxResource)
+
+    hero.attacke[hero.attacke.keys.elementAt(0)] = dmgAttack1
+    hero.attacke[hero.attacke.keys.elementAt(1)] = dmgAttack2
+    hero.attacke[hero.attacke.keys.elementAt(2)] = dmgAttack3
+
+    hero.hasBuff = false
+
+}
+
 fun theFight() {
 
     if (enemys.size == 1) {
@@ -119,7 +144,7 @@ fun theFight() {
                 enemyInFight()
                 createHeroes()
                 if (hero.hasBuff){
-                    moreDmg(hero)
+                    moreDmgBoss(hero)
                     continue
                 }
                 hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
@@ -165,7 +190,7 @@ fun theFight() {
                 }
                 if (input == 1) {
                     if (hero.hasBuff){
-                        moreDmg(hero)
+                        moreDmgBoss(hero)
                         continue
                     } else {
                         hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
@@ -173,7 +198,7 @@ fun theFight() {
 
                 } else {
                     if (hero.hasBuff){
-                        moreDmg(hero)
+                        moreDmgBossHelper(hero)
                         continue
                     }else {
                         hero.attack(bossHelper, hero.attacke, hero.resurce, hero.maxResource)
@@ -187,7 +212,7 @@ fun theFight() {
                     break
                 } else {
                     if (hero.hasBuff){
-                        moreDmg(hero)
+                        moreDmgBoss(hero)
                     }else {
                         hero.attack(boss, hero.attacke, hero.resurce, hero.maxResource)
                     }
