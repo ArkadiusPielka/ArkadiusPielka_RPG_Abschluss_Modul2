@@ -11,7 +11,7 @@ class Monk(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
     override var startLevel = (5 until 10).random()
     override var maxHP: Int = startLevel
     override var currentHP = maxHP
-    override var resurce: Int = 6
+    override var resurce: Int = 0
     override var maxResource: Int = 6
     var dmgNwe = 20 * startLevel
     override var thisResource = "Chakra"

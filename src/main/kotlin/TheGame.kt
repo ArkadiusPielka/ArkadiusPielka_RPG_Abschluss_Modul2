@@ -1,3 +1,4 @@
+const val SLEEP_TIME: Long = 2000
 fun main() {
 
     println("Herzlich willkommen")
@@ -10,7 +11,7 @@ fun main() {
     println("Der Boss wird erstellt:")
     createBoss()
     Thread.sleep(SLEEP_TIME)
-    boss.spezialAttackBoss()
+//    boss.spezialAttackBoss()
     println("Der Kampf beginnt!!")
     println()
     var i = 0

@@ -6,10 +6,10 @@ import enemys
 
 class Warrior(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, dmg) {
 
-    override var startLevel = (5 until 10).random()
-    override var maxHP: Int = hp * startLevel +1000
+    override var startLevel = (7 until 10).random()
+    override var maxHP: Int = hp * startLevel
     override var currentHP = maxHP
-    override var resurce: Int = 40
+    override var resurce: Int = 0
     override var maxResource: Int = 100
     var dmgNwe = 20 * startLevel
     var numberOfHits = 3
