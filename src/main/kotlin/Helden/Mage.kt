@@ -55,27 +55,27 @@ class Mage(name: String, level: Int, hp: Int, dmg: Int) : Hero(name, hp, level, 
 
         if (needHeal.isEmpty()){
             println("Es braucht keiner eine Heilung")
-        }
+        }else {
+            println("'${this.name}' Heilt alle mit '$attacke':")
 
-        println("'${this.name}' Heilt alle mit '$attacke':")
-
-        for (char in needHeal) {
-            if (char.isDead) {
-                println("${char.name} ist besiegt und kann nicht geheilt werden ${char.currentHP}/${char.maxHP}")
-            } else if (char.currentHP < char.maxHP) {
-                val life = char.currentHP
-                val newHP = healing + life
-                if (newHP > char.maxHP) {
-                    println("${char.name} wurde geheilt ${char.maxHP}/${char.maxHP}")
-                    char.currentHP = char.maxHP
-                } else {
-                    char.currentHP += healing
-                    println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
+            for (char in needHeal) {
+                if (char.isDead) {
+                    println("${char.name} ist besiegt und kann nicht geheilt werden ${char.currentHP}/${char.maxHP}")
+                } else if (char.currentHP < char.maxHP) {
+                    val life = char.currentHP
+                    val newHP = healing + life
+                    if (newHP > char.maxHP) {
+                        println("${char.name} wurde geheilt ${char.maxHP}/${char.maxHP}")
+                        char.currentHP = char.maxHP
+                    } else {
+                        char.currentHP += healing
+                        println("${char.name} wurde geheilt ${char.currentHP}/${char.maxHP}")
+                    }
                 }
             }
-        }
         this.resurce -= this.specialAttackCost!!
         println()
+        }
         Thread.sleep(SLEEP_TIME)
     }
 }
