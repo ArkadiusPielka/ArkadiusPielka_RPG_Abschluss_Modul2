@@ -1,10 +1,11 @@
 const val SLEEP_TIME: Long = 2000
 fun main() {
 
-    println("Herzlich willkommen")
+    println()
+    println("Herzlich willkommen zu 'Golden Syntax'")
     println()
     Thread.sleep(SLEEP_TIME)
-    println("Die helden werden generiert")
+    println("Die Helden werden generiert")
     println()
     Thread.sleep(SLEEP_TIME)
     createHeroes()

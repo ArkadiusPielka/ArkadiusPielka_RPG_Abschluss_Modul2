@@ -89,9 +89,10 @@ class Boss(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) {
         val heal = this.hp + this.maxHP / 2
         if (heal > this.maxHP){
             this.hp = this.maxHP
+        } else {
+            this.hp = this.hp + this.maxHP / 2
+            println()
         }
-        this.hp = this.hp + this.maxHP / 2
-        println()
     }
 
     override fun attack(target: MutableList<Hero>, attack: Map<String, Int>) {
@@ -100,7 +101,7 @@ class Boss(name: String, hp: Int, maxHP: Int) : Opponent(name, hp, maxHP) {
         var hero = chars.random()
         var crit = (1..100).random()
 
-        while (atkNamen == "Heilung" && (hp <= maxHP / 2 && crit < 30)) {
+        while (atkNamen == "Heilung" && (hp < maxHP / 2 && crit < 30)) {
             atkNamen = attack.keys.toList().random()
         }
         println()

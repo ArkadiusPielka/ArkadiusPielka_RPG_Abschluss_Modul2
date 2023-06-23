@@ -161,7 +161,7 @@ fun theFight() {
         for (hero in chars) {
             if (hero.hasDebuff){
                 heroHasDot(chars, boss.attack)
-                continue
+//                continue
             }
             if (hero.isDead) {
                 continue
@@ -184,7 +184,7 @@ fun theFight() {
         for (hero in chars) {
             if (hero.hasDebuff){
                 heroHasDot(chars, boss.attack)
-                continue
+//                continue
             }
             if (hero.isDead) {
                 continue
